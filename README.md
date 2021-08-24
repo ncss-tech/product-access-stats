@@ -1,4 +1,5 @@
 # Access Statistics
+Spatial and temporal patterns of requests to USDA-NRCS Soil Survey data.
 
 ## Web Soil Survey
 Updated semi-annually.
