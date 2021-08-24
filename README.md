@@ -14,7 +14,7 @@ Updated semi-annually.
 ![](results/WSS/WSS-AOI-vs-popdens-hexbin.png)
 ![](results/WSS/median-AOI-vs-popdens.png)
 
-### AOI Desnity by TLD
+### AOI Density by TLD
 ![](results/WSS/WSS-AOI-density-TLD.png)
 ![](results/WSS/WSS-AOI-density-pctile-TLD.png)
 
@@ -25,14 +25,16 @@ Updated semi-annually.
 
 [All figures, updated semi-annually.](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/)
 
+### Desktop Application (SoilWeb "Gmaps")
 ![SoilWeb Gmaps Application: Query Density](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/gmap-density.png)
 ![SoilWeb Gmaps Application: Requests per Day](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/gmap_daily-ts-decomposition.png)
 ![SoilWeb Gmaps Application: Requests per Day / Year](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/gmap_yearly-bwplot.png)
 
-
+### iOS and Android Smartphone Applications
 ![SoilWeb Smartphone App: Query Density](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/app-2x-density.png)
 ![SoilWeb Smartphone App: Requests per Day](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/app-2x_daily-ts-decomposition.png)
 
+### Google Earth Application
 ![SoilWeb Google Earth: Requests per Day](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/GE-requests-daily.png)
 
 
