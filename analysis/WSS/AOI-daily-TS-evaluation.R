@@ -2,7 +2,7 @@ library(latticeExtra)
 library(reshape2)
 
 # load combined/pre-processed data
-x <- readRDS('data/AOI-points.rds')
+x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))
 
 # lots of records
 nrow(x)
@@ -41,7 +41,7 @@ u.date <- as.character(max(x.daily$date, na.rm=TRUE))
 
 # labels for x-axis
 d.seq <- seq.Date(from=min(x.daily$date), to=max(x.daily$date), by='3 months')
-d.seq <- c(d.seq, max(x.daily$date)+1)
+d.seq <- c(d.seq, max(x.daily$date) + 1)
 
 ## figure
 p <- xyplot(value ~ date | variable, data=m, 
@@ -59,7 +59,7 @@ p <- xyplot(value ~ date | variable, data=m,
               panel.xyplot(...)
 })
 
-filename <- 'WSS_AOI_daily-ts-decomposition.png'
+filename <- '../../results/WSS/WSS_AOI_daily-ts-decomposition.png'
 png(file = filename, width = 1500, height = 650, res = 100, type = 'windows', antialias = 'cleartype')
 print(p)
 dev.off()

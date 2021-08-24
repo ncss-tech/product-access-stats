@@ -1,3 +1,11 @@
+##
+##
+##
+
+
+## data are stored locally for now
+wd <- 'S:/NRCS/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
+setwd(wd)
 
 
 ## re-build .csv.gz versions of the source data

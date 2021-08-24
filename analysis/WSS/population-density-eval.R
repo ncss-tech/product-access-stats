@@ -6,7 +6,7 @@ library(viridis)
 
 
 ## AOI density, counts / 10x10 grid cells
-r <- raster('AOI-density-2015-2021.tif')
+r <- raster('../../GIS/WSS/AOI-density-2015-2021.tif')
 
 # mean monthly version: that looks strange...
 # r <- raster('AOI-density-mean-monthly.tif')
@@ -35,7 +35,7 @@ s$AOI_density_1x1 <- s$AOI_density / 100
 # 
 
 
-png(file='WSS-AOI-vs-popdens-hexbin.png', width=900, height=900, res = 120, type = 'windows', antialias = 'cleartype')
+png(file = '../../results/WSS/WSS-AOI-vs-popdens-hexbin.png', width=900, height=900, res = 120, type = 'windows', antialias = 'cleartype')
 
 print(
   
@@ -94,7 +94,7 @@ d <- density(na.omit(log(s$population_density[idx], base=10)))
 d <- data.frame(x=d$x, y=d$y)
 
 # plot, note trick used to fool lattice into re-computing log-scale x-axis
-png(file='median-AOI-vs-popdens.png', width=800, height=600, res=100, type='windows', antialias='cleartype')
+png(file='../../results/WSS/median-AOI-vs-popdens.png', width=800, height=600, res=100, type='windows', antialias='cleartype')
 
 print(
   xyplot(y ~ 10^x, data=d, type=c('l', 'g'), main='Web Soil Survey\nAOI Centroid Density > 50th pctile\n2015-2020', xlab=list(cex=1.25, label='Population Density (person / sq. km)'), ylab='Relative Frequency', col='black', lwd=2, scales=list(cex=1, x=list(log=10)), xscale.components= xscale.components.logpower)

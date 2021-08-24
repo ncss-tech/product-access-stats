@@ -37,7 +37,7 @@ us_states <- as(us_states, 'Spatial')
 us_states <- spTransform(us_states, CRS(crs_lower48))
 
 # load combined/pre-processed data
-x <- readRDS('data/AOI-points.rds')
+x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))
 
 
 # subset for prototyping
@@ -54,8 +54,8 @@ x <- spTransform(x, CRS(crs_lower48))
 
 # keep SPDF for later
 x.spdf <- x
-saveRDS(x.spdf, file = 'data/AOI-points-AEA.rds')
-rm(x.spdf); gc(reset=TRUE)
+saveRDS(x.spdf, file = file.path(wd, 'data', 'AOI-points-AEA.rds'))
+rm(x.spdf); gc(reset = TRUE)
 
 # down-grade to DF
 x <- as(x, 'data.frame')
@@ -93,19 +93,19 @@ y.lim <- c(b[2, 1] - 1e5, b[2, 2] + 1e5)
 
 # grid + overlay of CONUS states
 # maxpixels argument used to ensure all cells are included = slower plotting
-pp <- levelplot(r, maxpixels=ncell(r) + 1,
-          margin=FALSE, xlim=x.lim, ylim=y.lim,
-          scales=list(draw=FALSE), zscaleLog=10,
-          col.regions=viridis,
-          panel=function(...) {
+pp <- levelplot(r, maxpixels = ncell(r) + 1,
+          margin = FALSE, xlim = x.lim, ylim = y.lim,
+          scales = list(draw = FALSE), zscaleLog = 10,
+          col.regions = viridis,
+          panel = function(...) {
             panel.levelplot(...)
-            sp.polygons(us_states, col='black', lwd=2)
+            sp.polygons(us_states, col = 'black', lwd = 2)
           }
           )
 
 
 
-png(file='WSS-AOI-density.png', width=1100, height=900, res = 100, type = 'cairo', antialias = 'subpixel')
+png(file='../../results/WSS/WSS-AOI-density.png', width=1100, height=900, res = 100, type = 'cairo', antialias = 'subpixel')
 
 update(pp, 
        main='Web Soil Survey AOI Centroid Density\n2015-2021', 
@@ -117,7 +117,7 @@ dev.off()
 
 
 # save for GIS use
-writeRaster(r, filename='AOI-density-2015-2021.tif', options="COMPRESS=LZW", datatype="INT2S", overwrite=TRUE)
+writeRaster(r, filename='../../GIS/WSS/AOI-density-2015-2021.tif', options="COMPRESS=LZW", datatype="INT2S", overwrite=TRUE)
 
 
 

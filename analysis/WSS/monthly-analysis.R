@@ -21,7 +21,7 @@ us_states <- as(us_states, 'Spatial')
 us_states <- spTransform(us_states, CRS(crs_lower48))
 
 # load combined/pre-processed data
-x <- readRDS('data/AOI-points.rds')
+x <- readRDS(file.path(wd, 'data', 'AOI-points.rds')
 
 
 xl <- split(x, x$ym)
@@ -93,7 +93,7 @@ z.sd[z.sd[] < 0.1] <- NA
 
 ## monthly mean pretty interesting
 
-png(file='WSS-AOI-density-monthly-mean.png', width=1100, height=900, res = 100, type = 'cairo', antialias = 'subpixel')
+png(file = '../../results/WSS/WSS-AOI-density-monthly-mean.png', width=1100, height=900, res = 100, type = 'cairo', antialias = 'subpixel')
 
 p <- levelplot(z.mean,
           margin=FALSE, xlim=x.lim, ylim=y.lim,
@@ -117,7 +117,7 @@ print(p)
 dev.off()
 
 # save for GIS use
-writeRaster(z.mean, filename='AOI-density-mean-monthly.tif', options="COMPRESS=LZW", datatype="FLT4S", overwrite=TRUE)
+writeRaster(z.mean, filename='../../GIS/WSS/AOI-density-mean-monthly.tif', options="COMPRESS=LZW", datatype="FLT4S", overwrite=TRUE)
 
 
 

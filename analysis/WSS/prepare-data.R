@@ -1,10 +1,13 @@
+## source data are stored locally
+
 ## TODO: append vs. 100% rebuild each iteration
 
 # fast file reading, sorting, and unique() methods
 library(data.table)
 
 # subsets of original data
-f <- list.files(path='data', pattern='\\.csv.gz', full.names = TRUE)
+fp <- file.path(wd, 'data')
+f <- list.files(path = fp, pattern='\\.csv.gz', full.names = TRUE)
 
 # read / combine
 x <- lapply(f, fread)
@@ -26,7 +29,7 @@ x <- as.data.frame(x)
 x <- x[order(x$date), ]
 
 # save for later
-saveRDS(x, file = 'data/AOI-points.rds')
+saveRDS(x, file = file.path(fp, 'AOI-points.rds'))
 
 
 
