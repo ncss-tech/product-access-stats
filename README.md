@@ -6,7 +6,6 @@ Updated semi-annually.
 ### AOI Centroid Density Maps
 ![](results/WSS/WSS-AOI-density.png)
 ![](results/WSS/WSS-AOI-density-monthly-mean.png)
-![](results/WSS/WSS-AOI-density-monthly-mean.png)
 
 ### AOI Created per Day
 ![](results/WSS/WSS_AOI_daily-ts-decomposition.png)
