@@ -54,7 +54,7 @@ x <- spTransform(x, CRS(crs_lower48))
 
 # keep SPDF for later
 x.spdf <- x
-save(x.spdf, file='data/AOI-points-AEA.rda')
+saveRDS(x.spdf, file = 'data/AOI-points-AEA.rds')
 rm(x.spdf); gc(reset=TRUE)
 
 # down-grade to DF

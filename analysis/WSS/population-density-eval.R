@@ -8,6 +8,8 @@ library(viridis)
 ## AOI density, counts / 10x10 grid cells
 r <- raster('AOI-density-2015-2021.tif')
 
+# mean monthly version: that looks strange...
+# r <- raster('AOI-density-mean-monthly.tif')
 
 ## population density CONUS only
 
@@ -151,7 +153,7 @@ dev.off()
 # library(mapview)
 # library(leafsync)
 # 
-# load(file = 'data/AOI-points-AEA.rda')
+# x.spdf <- readRDS(file = 'data/AOI-points-AEA.rds')
 # 
 # 
 # # strip across CA, define in GCS
