@@ -37,6 +37,7 @@ us_states <- as(us_states, 'Spatial')
 us_states <- spTransform(us_states, CRS(crs_lower48))
 
 # load combined/pre-processed data
+wd <- 'S:/NRCS/Archive_Dylan_Beaudette/NSSC/WSS-access-stats/'
 x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))
 
 
