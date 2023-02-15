@@ -28,8 +28,8 @@ Updated semi-annually.
 
 ### Desktop Application (SoilWeb "Gmaps")
 ![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density.png)
-![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-HI.png)
-![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-PR.png)
+![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density-HI.png)
+![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density-PR.png)
 
 
 ![SoilWeb Gmaps Application: Requests per Day](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/gmap_daily-ts-decomposition.png)
