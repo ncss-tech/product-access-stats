@@ -1,9 +1,13 @@
-library(lattice)
+library(latticeExtra)
 library(reshape2)
 library(tactile)
+library(ragg)
+
+## common configuration
+source('config.R')
 
 # source data, pre-processed
-load('processed-data/app-2x.Rda')
+x.daily <- readRDS(file.path(.input, 'app-2x-daily.Rds'))
 
 # note that there is a gap
 x <- subset(x.daily, subset=date > as.Date('2019-04-01'))
@@ -31,7 +35,7 @@ md <- max(x$date, na.rm=TRUE)
 u.date <- as.character(md)
 
 # labels for x-axis
-d.seq <- seq.Date(from=as.Date('2019-04-01'), to=md, by='1 months')
+d.seq <- seq.Date(from=as.Date('2019-04-01'), to=md, by='2 months')
 
 
 p <- xyplot(value ~ date | variable, data=m, 
@@ -50,8 +54,8 @@ p <- xyplot(value ~ date | variable, data=m,
               panel.xyplot(...)
 })
 
-filename <- 'figures/app-2x_daily-ts-decomposition.png'
-png(file=filename, width=1400, height=650, res=100, type='cairo', antialias='subpixel')
+filename <- file.path(.figureOutput, 'app-2x_daily-ts-decomposition.png')
+agg_png(filename = filename, width=1400, height=650, res=100)
 print(p)
 dev.off()
 

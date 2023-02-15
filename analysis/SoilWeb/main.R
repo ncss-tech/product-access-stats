@@ -6,6 +6,7 @@
 # ~ 2.5 minutes
 source('prepare-data.R')
 
+## TODO: use better labeling for log scales
 
 ## create point density grids
 # CONUS, PR, Hi
@@ -20,4 +21,7 @@ source('make-density-figures.R')
 
 ## make time series plots
 source('gmap-daily-ts-decomposition.R')
+source('app-2x-daily-ts-decomposition.R')
 
+
+## TODO: old-style figures, land use intersection, etc.

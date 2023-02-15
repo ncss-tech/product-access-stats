@@ -30,8 +30,6 @@ Updated semi-annually.
 ![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density.png)
 ![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density-HI.png)
 ![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density-PR.png)
-
-
 ![SoilWeb Gmaps Application: Requests per Day](results/SoilWeb/gmap_daily-ts-decomposition.png)
 ![SoilWeb Gmaps Application: Requests per Day / Year](results/SoilWeb/gmap_yearly-bwplot.png)
 
@@ -39,8 +37,7 @@ Updated semi-annually.
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density.png)
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density-HI.png)
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density-PR.png)
-
-![SoilWeb Smartphone App: Requests per Day](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/app-2x_daily-ts-decomposition.png)
+![SoilWeb Smartphone App: Requests per Day](results/SoilWeb/app-2x_daily-ts-decomposition.png)
 
 ### Google Earth Application
 ![SoilWeb Google Earth: Requests per Day](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/GE-requests-daily.png)
