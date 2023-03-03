@@ -13,7 +13,7 @@ library(terra)
 library(magick)
 
 ## local functions
-source('local-functions.R')
+source('../local-functions.R')
 
 ## common configuration
 source('config.R')
