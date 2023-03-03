@@ -20,6 +20,13 @@ wd <- 'S:/NRCS/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
 source('prepare-data.R')
 
 
+
+## create point density grids
+# CONUS, PR, Hi
+# ~ 6 minutes
+source('prepare-density-grids.R')
+
+
 ## AOI daily time-series analysis
 source('AOI-daily-TS-evaluation.R')
 
