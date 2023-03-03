@@ -156,5 +156,26 @@ write.csv(x, file=gzfile('WSS-centroids-06-2021.csv.gz'), row.names = FALSE)
 
 
 
+##### 2023-03-03 new file
+# 5626015 rows
+# "2021-06-30" "2023-02-19"
+x <- read_delim(file.path(wd, 'data', 'WSS_AOI_Centroid.csv'), delim = ',', na = '', col_names = TRUE, guess_max = 1e6)
+x <- as.data.frame(x)
 
+head(x)
+nrow(x)
+
+x$date <- as.Date(x$log_date, format='%m-%d-%y')
+x$x <- x$long_x
+x$y <- x$lat_y
+
+x <- x[, c('LogID', 'x', 'y', 'date')]
+
+# ok
+head(x)
+range(x$date)
+
+
+# ~ 1 minute
+write.csv(x, file = gzfile(file.path(wd, 'data', 'WSS-centroids-02-2023.csv.gz')), row.names = FALSE)
 

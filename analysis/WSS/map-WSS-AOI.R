@@ -7,7 +7,7 @@
 
 library(sp)
 library(rgdal)
-library(rasterVis)
+library(raster)
 library(latticeExtra)
 library(plyr)
 library(reshape2)

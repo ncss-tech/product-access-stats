@@ -1,5 +1,7 @@
 ## source data are stored locally
 
+
+
 ## TODO: append vs. 100% rebuild each iteration
 
 # fast file reading, sorting, and unique() methods
@@ -27,6 +29,9 @@ x <- as.data.frame(x)
 
 # re-order by date
 x <- x[order(x$date), ]
+
+# 2023: 25,069,424 rows
+nrow(x)
 
 # save for later
 saveRDS(x, file = file.path(fp, 'AOI-points.rds'))

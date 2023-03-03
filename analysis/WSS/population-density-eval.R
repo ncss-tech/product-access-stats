@@ -41,7 +41,7 @@ print(
   
   hexbinplot(AOI_density_1x1 ~ population_density, data=s, 
              scales=list(log=10, alternating=3), asp=1, xbins=60,
-             main='Web Soil Survey AOI Centroid Density\n2015-2020',
+             main='Web Soil Survey AOI Centroid Density\n2015-2023',
              ylab='AOI Density (AOI / sq. km)',
              xlab='Population Density (person / sq. km)',
              colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
@@ -97,7 +97,7 @@ d <- data.frame(x=d$x, y=d$y)
 png(file='../../results/WSS/median-AOI-vs-popdens.png', width=800, height=600, res=100, type='windows', antialias='cleartype')
 
 print(
-  xyplot(y ~ 10^x, data=d, type=c('l', 'g'), main='Web Soil Survey\nAOI Centroid Density > 50th pctile\n2015-2020', xlab=list(cex=1.25, label='Population Density (person / sq. km)'), ylab='Relative Frequency', col='black', lwd=2, scales=list(cex=1, x=list(log=10)), xscale.components= xscale.components.logpower)
+  xyplot(y ~ 10^x, data=d, type=c('l', 'g'), main='Web Soil Survey\nAOI Centroid Density > 50th pctile\n2015-2023', xlab=list(cex=1.25, label='Population Density (person / sq. km)'), ylab='Relative Frequency', col='black', lwd=2, scales=list(cex=1, x=list(log=10)), xscale.components= xscale.components.logpower)
 )
 
 dev.off()

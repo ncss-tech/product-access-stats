@@ -5,7 +5,7 @@ library(rasterVis)
 library(latticeExtra)
 library(plyr)
 library(reshape2)
-library(rasterVis)
+library(raster)
 library(viridis)
 library(sf)
 library(spData) 
@@ -21,7 +21,7 @@ us_states <- as(us_states, 'Spatial')
 us_states <- spTransform(us_states, CRS(crs_lower48))
 
 # load combined/pre-processed data
-x <- readRDS(file.path(wd, 'data', 'AOI-points.rds')
+x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))
 
 
 xl <- split(x, x$ym)
@@ -83,7 +83,7 @@ hist(log(z.cv))
 
 
 # truncate for viz, why the high values... what do these represent?
-z.mean[z.mean[] > 10] <- 10
+z.mean[z.mean[] > 20] <- 20
 z.sd[z.sd[] > 10] <- 10
 
 
@@ -93,11 +93,11 @@ z.sd[z.sd[] < 0.1] <- NA
 
 ## monthly mean pretty interesting
 
-png(file = '../../results/WSS/WSS-AOI-density-monthly-mean.png', width=1100, height=900, res = 100, type = 'cairo', antialias = 'subpixel')
+png(file = '../../results/WSS/WSS-AOI-density-monthly-mean.png', width=1100, height=900, res = 100, antialias = 'cleartype')
 
 p <- levelplot(z.mean,
           margin=FALSE, xlim=x.lim, ylim=y.lim,
-          scales=list(draw=FALSE), zscaleLog=10,
+          scales=list(draw=FALSE), 
           maxpixels = ncell(z.mean) + 1,
           col.regions=viridis,
           panel=function(...) {
@@ -108,7 +108,7 @@ p <- levelplot(z.mean,
 
 p <- update(p, 
        main='Web Soil Survey AOI Centroid Density\nMean Monthly Values 2015-2021', 
-       sub=sprintf('log10(counts) / %sx%s km grid cell\nUpdated: %s', as.character(g), as.character(g), u.date), 
+       sub=sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(g), as.character(g), u.date), 
        scales=list(cex=1.125)
 )
 
