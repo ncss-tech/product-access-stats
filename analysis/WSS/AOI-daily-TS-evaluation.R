@@ -1,8 +1,12 @@
 library(latticeExtra)
-# library(tactile)
+library(tactile)
 library(reshape2)
 library(data.table)
 library(ragg)
+
+
+## common configuration
+source('config.R')
 
 # load combined/pre-processed data
 x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))
@@ -17,6 +21,17 @@ x.daily <- as.data.frame(x.daily)
 
 nrow(x.daily)
 range(x.daily$date)
+
+# yearly stats
+x.daily$yr <- format(x.daily$date, '%Y')
+
+# monthly stats
+x.daily$mo <- format(x.daily$date, '%b')
+x.daily$mo <- factor(
+  x.daily$mo, 
+  levels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+)
+
 
 ## TODO: automate this
 # smooth over ... what
@@ -76,9 +91,35 @@ p <- xyplot(
     panel.xyplot(...)
   })
 
-filename <- '../../results/WSS/WSS_AOI_daily-ts-decomposition.png'
+filename <- file.path(.figureOutput, 'WSS_AOI_daily-ts-decomposition.png')
 agg_png(filename = filename, width = 1800, height = 800, res = 100, scaling = 1.5)
 print(p)
 dev.off()
+
+
+
+
+
+## yearly stats by month
+p <- bwplot(yr ~ freq | mo, data = x.daily,
+            as.table = TRUE,
+            par.settings = tactile.theme(),
+            layout = c(3, 4),
+            scales = list(alternating = 3),
+            xlab = 'AOI per Day',
+            main = paste('Updated:',  u.date),
+            panel = function(...) {
+              panel.grid(-1, -1)
+              panel.bwplot(...)
+            }
+)
+
+
+filename <- file.path(.figureOutput, 'daily-AOI-by-year-bwplot.png')
+agg_png(filename = filename, width = 1000, height = 900, res = 100)
+print(p)
+dev.off()
+
+
 
 

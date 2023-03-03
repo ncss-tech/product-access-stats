@@ -5,11 +5,18 @@ Spatial and temporal patterns of requests to USDA-NRCS Soil Survey data.
 Updated semi-annually.
 
 ### AOI Centroid Density Maps
-![](results/WSS/WSS-AOI-density.png)
+![](results/WSS/AOI-density.png)
+![](results/WSS/AOI-density-HI.png)
+![](results/WSS/AOI-density-PR.png)
+
+#### Monthly Average
 ![](results/WSS/WSS-AOI-density-monthly-mean.png)
 
 ### AOI Created per Day
 ![](results/WSS/WSS_AOI_daily-ts-decomposition.png)
+<br>
+<br>
+![](results/WSS/daily-AOI-by-year-bwplot.png)
 
 ### AOI Creation vs Population Density
 ![](results/WSS/WSS-AOI-vs-popdens-hexbin.png)
