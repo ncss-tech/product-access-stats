@@ -108,23 +108,37 @@
 
 
 
-## note: many vars taken from global environment
+# NOTE: many vars taken from global environment
+# NOTE: WSS data are close to requiring postGIS
+# TODO: finish implementing AK processing
 
 .makeGrids <- function(x, .prefix, .output) {
   
   ## upgrade to spatVect
   # GCS WGS84
+  message('  txt -> spatVect')
   x <- vect(x, geom = c('x', 'y'), crs = 'EPSG:4326')
   
   
   ## filter: CONUS, AK, HI, PR
-  x.conus <- intersect(x, us_states)
-  x.ak <- intersect(x, ak)
-  x.hi <- intersect(x, hi)
-  x.pr <- intersect(x, pr)
   
+  # TODO: make this more efficient (slowest component)
+  # TODO: AK, HI, OR: only intersect missing records from CONUS
+  message('  spatial intersection/filter')
+  x.conus <- intersect(x, us_states)
+  
+  ## exclude CONUS for efficiency
+  .idx <- which(! x$LogID %in% x.conus$LogID)
+  x.hi <- intersect(x[.idx, ], hi)
+  x.pr <- intersect(x[.idx, ], pr)
+  # x.ak <- intersect(x[.idx, ], ak)
+  
+  ## cleanup
+  rm(x)
+  gc(reset = TRUE)
   
   ## transform CONUS points / outline to 5070
+  message('  transform to local CRS')
   x.conus <- project(x.conus, crs.conus)
   us_states <- project(us_states, crs.conus)
   
@@ -138,14 +152,15 @@
   # AK
   
   
-  
-  ## TODO: dynamic file path
+  # TODO: dynamic file path
   ## keep CONUS points for later
+  message('  save CONUS points (EPSG:5070) for later')
   .file <- sprintf("processed-data/%s-points-AEA.Rds", .prefix)
   saveRDS(x.conus, file = .file)
   
   
   ## convert points -> grid of counts, at specified resolution
+  message('  point -> grid conversion')
   r.conus <- pts2grid(x.conus, g = g.conus)
   r.pr <- pts2grid(x.pr, g = g.pr)
   r.hi <- pts2grid(x.hi, g = g.hi)
@@ -173,6 +188,7 @@
   
 }
 
+## TODO: wasteful copying / reshaping, can probably be done with grids only
 
 pts2grid <- function(p, g) {
   # down-grade to DF
@@ -188,7 +204,8 @@ pts2grid <- function(p, g) {
   x.wide <- dcast(x.df, x + y ~ fake, fun.aggregate = length, value.var = 'fake')
   
   ## points -> rast
-  r <- rast(x.wide, type = 'xyz', crs = 'EPSG:5070')
+  # use CRS of points
+  r <- rast(x.wide, type = 'xyz', crs = crs(p))
   
   # # crop to CONUS
   # r <- crop(r, ext(us_states))

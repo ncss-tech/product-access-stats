@@ -3,7 +3,7 @@
 ##
 
 ## TODO: move to local disk
-
+## TODO: consolidate intermediate files
 
 
 ## data are stored locally for now
@@ -19,17 +19,36 @@ wd <- 'S:/NRCS/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
 ## automated
 source('prepare-data.R')
 
+## AOI daily time-series analysis
+source('AOI-daily-TS-evaluation.R')
 
 
 ## create point density grids
 # CONUS, PR, Hi
-# ~ 6 minutes
+# ~ 14 minutes
 source('prepare-density-grids.R')
 
 
-## AOI daily time-series analysis
-source('AOI-daily-TS-evaluation.R')
+## make density maps
+# CONUS, PR, Hi
+# ~ 2 minutes
+source('make-density-figures.R')
 
+
+
+### adapt these
+
+
+## population density evaluation
+source('population-density-eval.R')
+
+
+## monthly analysis: not finished
+# source('monthly-analysis.R')
+
+
+
+#### archive these
 
 ## AOI density map
 source('map-WSS-AOI.R')
@@ -39,13 +58,6 @@ source('map-WSS-AOI.R')
 # source('prepare-TLD-data.R')
 # source('map-WSS-AOI-by-TLD.R')
 
-
-## population density evaluation
-source('population-density-eval.R')
-
-
-## monthly analysis: not finished
-# source('monthly-analysis.R')
 
 
 

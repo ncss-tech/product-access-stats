@@ -1,5 +1,6 @@
 # TODO
 
+ * process by chunk
 
 ## WSS
 
@@ -10,3 +11,4 @@
 
 ## SoilWeb
 
+ * add `LogID` column
