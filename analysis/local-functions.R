@@ -1,108 +1,173 @@
-.PR_DensityMap <- function(r, .file, .title, .g) {
-  
-  ### grid + overlay of PR
-  # maxpixels argument used to ensure all cells are included = slower plotting
-  pp <- levelplot(r, 
-                  maxpixels = ncell(r) + 1,
-                  margin = FALSE, 
-                  # xlim = x.lim, ylim = y.lim,
-                  scales = list(draw = FALSE), zscaleLog = 10,
-                  col.regions = viridis,
-                  panel = function(...) {
-                    panel.levelplot(...)
-                    sp.polygons(as(pr, 'Spatial'), col = 'black', lwd = 2)
-                  }
-  )
-  
-  
-  pp <- update(pp, 
-               main = .title, 
-               sub = sprintf('log10(counts) / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), 
-               scales = list(cex=1.125)
-  )
-  
+.PR_DensityMap <- function(r, .file, .title, .g, .n = 10) {
   
   png(filename = .file, width = 2200, height = 900, res = 200)
   
-  print(pp)
+  plot(
+    r,
+    breaks = .n,
+    breakby = 'cases',
+    col = viridis(.n),
+    plg = list(x = 'bottomleft', cex = 0.75, ncol = 2),
+    axes = FALSE,
+    mar = c(2, 1, 1, 1),
+    maxcell = ncell(r) + 1,
+    main = .title
+  )
+  lines(pr, lwd = 2)
+  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1)
   
   dev.off()
   
   resizeImage(.file, geom = '1000x')
   
+  # ### grid + overlay of PR
+  # # maxpixels argument used to ensure all cells are included = slower plotting
+  # pp <- levelplot(r, 
+  #                 maxpixels = ncell(r) + 1,
+  #                 margin = FALSE, 
+  #                 # xlim = x.lim, ylim = y.lim,
+  #                 scales = list(draw = FALSE), zscaleLog = 10,
+  #                 col.regions = viridis,
+  #                 panel = function(...) {
+  #                   panel.levelplot(...)
+  #                   sp.polygons(as(pr, 'Spatial'), col = 'black', lwd = 2)
+  #                 }
+  # )
+  # 
+  # 
+  # pp <- update(pp, 
+  #              main = .title, 
+  #              sub = sprintf('log10(counts) / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), 
+  #              scales = list(cex=1.125)
+  # )
+  # 
+  # 
+  # png(filename = .file, width = 2200, height = 900, res = 200)
+  # 
+  # print(pp)
+  # 
+  # dev.off()
+  # 
+  # resizeImage(.file, geom = '1000x')
+  
 }
 
 
-.HI_DensityMap <- function(r, .file, .title, .g) {
+.HI_DensityMap <- function(r, .file, .title, .g, .n = 10) {
   
   ## grid + overlay of HI
-  # maxpixels argument used to ensure all cells are included = slower plotting
-  pp <- levelplot(r, 
-                  maxpixels = ncell(r) + 1,
-                  margin = FALSE, 
-                  # xlim = x.lim, ylim = y.lim,
-                  scales = list(draw = FALSE), zscaleLog = 10,
-                  col.regions = viridis,
-                  panel = function(...) {
-                    panel.levelplot(...)
-                    sp.polygons(as(hi, 'Spatial'), col = 'black', lwd = 2)
-                  }
-  )
-  
-  
-  pp <- update(pp, 
-               main = .title, 
-               sub = sprintf('log10(counts) / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), 
-               scales = list(cex=1.125)
-  )
-  
   png(filename = .file, width = 1900, height = 1500, res = 200)
   
-  print(pp)
+  plot(
+    r,
+    breaks = .n,
+    breakby = 'cases',
+    col = viridis(.n),
+    plg = list(x = 'bottomleft', cex = 1),
+    axes = FALSE,
+    mar = c(1.5, 1, 1, 1),
+    maxcell = ncell(r) + 1,
+    main = .title
+  )
+  lines(hi, lwd = 2)
+  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1)
   
   dev.off()
   
   resizeImage(.file, geom = '800x')
   
+  
+  ## log scales are hard to read
+  
+  # ## grid + overlay of HI
+  # # maxpixels argument used to ensure all cells are included = slower plotting
+  # pp <- levelplot(r.class, 
+  #                 maxpixels = ncell(r) + 1,
+  #                 margin = FALSE, 
+  #                 # xlim = x.lim, ylim = y.lim,
+  #                 scales = list(draw = FALSE), zscaleLog = 10,
+  #                 col.regions = viridis,
+  #                 panel = function(...) {
+  #                   panel.levelplot(...)
+  #                   sp.polygons(as(hi, 'Spatial'), col = 'black', lwd = 2)
+  #                 }
+  # )
+  # 
+  # 
+  # pp <- update(pp, 
+  #              main = .title, 
+  #              sub = sprintf('log10(counts) / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), 
+  #              scales = list(cex=1.125)
+  # )
+  # 
+  # png(filename = .file, width = 1900, height = 1500, res = 200)
+  # 
+  # print(pp)
+  # 
+  # dev.off()
+  # 
+  # resizeImage(.file, geom = '800x')
+  
 }
 
 
-.CONUS_DensityMap <- function(r, .file, .title, .g) {
+.CONUS_DensityMap <- function(r, .file, .title, .g, .n = 10) {
   
   # get CONUS extent and expand by ~ 100km = 100,000m
   b <- ext(us_states)
   x.lim <- c(b[1] - 1e5, b[2] + 1e5)
   y.lim <- c(b[3] - 1e5, b[4] + 1e5)
   
-  
-  # grid + overlay of CONUS states
-  # maxpixels argument used to ensure all cells are included = slower plotting
-  pp <- levelplot(r, 
-                  maxpixels = ncell(r) + 1,
-                  margin = FALSE, 
-                  xlim = x.lim, ylim = y.lim,
-                  scales = list(draw = FALSE), zscaleLog = 10,
-                  col.regions = viridis,
-                  panel = function(...) {
-                    panel.levelplot(...)
-                    sp.polygons(as(us_states, 'Spatial'), col = 'black', lwd = 2)
-                  }
-  )
-  
-  pp <- update(pp, 
-               main = .title, 
-               sub = sprintf('log10(counts) / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), 
-               scales = list(cex=1.125)
-  )
-  
   png(filename = .file, width = 2200, height = 1600, res = 200)
   
-  print(pp)
+  plot(
+    r,
+    breaks = .n,
+    breakby = 'cases',
+    col = viridis(.n),
+    plg = list(x = 'bottomleft', cex = 1, ncol = 2),
+    axes = FALSE,
+    mar = c(3, 1, 1.5, 0.5),
+    maxcell = ncell(r) + 1,
+    main = .title,
+    ylim = y.lim,
+    xlim = x.lim
+  )
+  lines(us_states, lwd = 2)
+  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1, line = 1.5)
   
   dev.off()
   
   resizeImage(.file, geom = '1000x')
   
+  # # grid + overlay of CONUS states
+  # # maxpixels argument used to ensure all cells are included = slower plotting
+  # pp <- levelplot(r, 
+  #                 maxpixels = ncell(r) + 1,
+  #                 margin = FALSE, 
+  #                 xlim = x.lim, ylim = y.lim,
+  #                 scales = list(draw = FALSE), zscaleLog = 10,
+  #                 col.regions = viridis,
+  #                 panel = function(...) {
+  #                   panel.levelplot(...)
+  #                   sp.polygons(as(us_states, 'Spatial'), col = 'black', lwd = 2)
+  #                 }
+  # )
+  # 
+  # pp <- update(pp, 
+  #              main = .title, 
+  #              sub = sprintf('log10(counts) / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), 
+  #              scales = list(cex=1.125)
+  # )
+  # 
+  # png(filename = .file, width = 2200, height = 1600, res = 200)
+  # 
+  # print(pp)
+  # 
+  # dev.off()
+  # 
+  # resizeImage(.file, geom = '1000x')
+  # 
 }
 
 

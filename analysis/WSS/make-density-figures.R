@@ -12,6 +12,7 @@ library(spData)
 library(terra)
 library(magick)
 
+
 ## local functions
 source('../local-functions.R')
 
@@ -50,7 +51,7 @@ hi <- project(hi, crs.hi)
 # CONUS
 r <- rast(file.path(.gridOutput, sprintf("%s-density.tif", .prefix)))
 .of <- file.path(.figureOutput, sprintf('%s-density.png', .prefix))
-.CONUS_DensityMap(r, .file = .of, .title = .title, .g = g.conus)
+.CONUS_DensityMap(r, .file = .of, .title = .title, .g = g.conus, .n = 10)
 
 # HI
 r <- rast(file.path(.gridOutput, sprintf("%s-density-HI.tif", .prefix)))
