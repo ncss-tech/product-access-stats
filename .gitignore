@@ -1,3 +1,4 @@
 
 *.Rds
 .Rproj*
+.Rproj.user
