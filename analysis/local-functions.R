@@ -1,5 +1,8 @@
 .PR_DensityMap <- function(r, .file, .title, .g, .n = 10) {
   
+  # close device on error
+  on.exit(dev.off(), add = TRUE)
+  
   png(filename = .file, width = 2200, height = 900, res = 200)
   
   plot(
@@ -54,6 +57,9 @@
 
 
 .HI_DensityMap <- function(r, .file, .title, .g, .n = 10) {
+  
+  # close device on error
+  on.exit(dev.off(), add = TRUE)
   
   ## grid + overlay of HI
   png(filename = .file, width = 1900, height = 1500, res = 200)
@@ -113,6 +119,9 @@
 
 .CONUS_DensityMap <- function(r, .file, .title, .g, .n = 10) {
   
+  # close device on error
+  on.exit(dev.off(), add = TRUE)
+  
   # get CONUS extent and expand by ~ 100km = 100,000m
   b <- ext(us_states)
   x.lim <- c(b[1] - 1e5, b[2] + 1e5)
@@ -122,7 +131,7 @@
   
   plot(
     r,
-    breaks = .n,
+    breaks = 10,
     breakby = 'cases',
     col = viridis(.n),
     plg = list(x = 'bottomleft', cex = 1, ncol = 2),
@@ -192,10 +201,12 @@
   message('  spatial intersection/filter')
   x.conus <- intersect(x, us_states)
   
+  ## 2023-10-03: auto-transform seems to have been dropped from terra
+  ##            -> consider performing intersection in GCS
   ## exclude CONUS for efficiency
   .idx <- which(! x$LogID %in% x.conus$LogID)
-  x.hi <- intersect(x[.idx, ], hi)
-  x.pr <- intersect(x[.idx, ], pr)
+  x.hi <- intersect(project(x[.idx, ], crs.hi), hi)
+  x.pr <- intersect(project(x[.idx, ], crs.pr), pr)
   # x.ak <- intersect(x[.idx, ], ak)
   
   ## cleanup
@@ -257,6 +268,7 @@
 
 pts2grid <- function(p, g) {
   # down-grade to DF
+  # this will fail with 0-length spatVect
   x.df <- as.data.frame(p, geom = 'XY')
   
   # decimate coordinates grid cell spacing (km) -> (m)

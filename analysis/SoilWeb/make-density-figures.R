@@ -3,9 +3,9 @@
 ##
 
 
-library(sp)
+# library(sp)
 library(latticeExtra)
-library(rasterVis)
+# library(rasterVis)
 library(viridisLite)
 library(sf)
 library(spData) 
@@ -65,6 +65,7 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 
 
 
+## TODO: these are broken, terra::plot() BS
 
 ## App 2.x
 .prefix <- 'app-2x'
@@ -88,6 +89,9 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 
 
 
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
 
 
 

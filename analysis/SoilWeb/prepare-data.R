@@ -175,3 +175,10 @@ saveRDS(x.daily, file = file.path(.output, 'app-1x-daily.Rds'))
 
 # too large to perform here
 
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
+
+
+

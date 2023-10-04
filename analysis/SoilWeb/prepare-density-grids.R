@@ -32,10 +32,12 @@ us_states <- project(us_states, 'EPSG:4326')
 
 # mobile app 2.x
 x <- readRDS(file.path(.input, 'app-2x.Rds'))
+x$LogID <- 1:nrow(x)
 .makeGrids(x, .prefix = 'app-2x', .output = .gridOutput)
 
 # gmaps application
 x <- readRDS(file.path(.input, 'gmap.Rds'))
+x$LogID <- 1:nrow(x)
 .makeGrids(x, .prefix = 'gmap', .output = .gridOutput)
 
 
@@ -43,5 +45,7 @@ x <- readRDS(file.path(.input, 'gmap.Rds'))
 # z <- rast('../../GIS/SoilWeb/app-2x-density-HI.tif')
 # plot(z)
 
-
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
 

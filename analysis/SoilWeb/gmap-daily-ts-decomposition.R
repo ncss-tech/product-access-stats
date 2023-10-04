@@ -80,3 +80,9 @@ agg_png(filename = filename, width = 1000, height = 450, res = 100)
 print(p)
 dev.off()
 
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
+
+

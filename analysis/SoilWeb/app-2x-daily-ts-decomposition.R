@@ -59,4 +59,9 @@ agg_png(filename = filename, width=1400, height=650, res=100)
 print(p)
 dev.off()
 
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
+
+
 
