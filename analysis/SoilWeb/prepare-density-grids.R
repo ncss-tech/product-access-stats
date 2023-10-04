@@ -31,18 +31,20 @@ us_states <- project(us_states, 'EPSG:4326')
 ## make grids
 
 # mobile app 2.x
+# ~ 5 minutes
 x <- readRDS(file.path(.input, 'app-2x.Rds'))
 x$LogID <- 1:nrow(x)
 .makeGrids(x, .prefix = 'app-2x', .output = .gridOutput)
 
 # gmaps application
+# ~ 10 minutes
 x <- readRDS(file.path(.input, 'gmap.Rds'))
 x$LogID <- 1:nrow(x)
 .makeGrids(x, .prefix = 'gmap', .output = .gridOutput)
 
 
 ## check
-# z <- rast('../../GIS/SoilWeb/app-2x-density-HI.tif')
+# z <- rast('../../GIS/SoilWeb/app-2x-density.tif')
 # plot(z)
 
 ## cleanup

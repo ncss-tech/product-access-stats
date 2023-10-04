@@ -1,15 +1,20 @@
-.PR_DensityMap <- function(r, .file, .title, .g, .n = 10) {
+.PR_DensityMap <- function(r, .file, .title, .g, .n = 10, .pal = 'viridis') {
   
   # close device on error
-  on.exit(dev.off(), add = TRUE)
+  on.exit(try(dev.off(), silent = TRUE), add = TRUE)
+  
+  # quantile-based classes
+  # can't have duplicate values (long-tailed distributions)
+  .breaks <- quantile(values(r), na.rm = TRUE, probs = seq(0, 1, length.out = .n))
+  .breaks <- unique(.breaks)
   
   png(filename = .file, width = 2200, height = 900, res = 200)
   
   plot(
     r,
-    breaks = .n,
-    breakby = 'cases',
-    col = viridis(.n),
+    breaks = quantile(values(r), na.rm = TRUE, probs = seq(0.1, 1, length.out = .n)),
+    # breakby = 'cases',
+    col = hcl.colors(n = length(.breaks), palette = .pal),
     plg = list(x = 'bottomleft', cex = 0.75, ncol = 2),
     axes = FALSE,
     mar = c(2, 1, 1, 1),
@@ -56,19 +61,24 @@
 }
 
 
-.HI_DensityMap <- function(r, .file, .title, .g, .n = 10) {
+.HI_DensityMap <- function(r, .file, .title, .g, .n = 10, .pal = 'viridis') {
   
   # close device on error
-  on.exit(dev.off(), add = TRUE)
+  on.exit(try(dev.off(), silent = TRUE), add = TRUE)
+  
+  # quantile-based classes
+  # can't have duplicate values (long-tailed distributions)
+  .breaks <- quantile(values(r), na.rm = TRUE, probs = seq(0, 1, length.out = .n))
+  .breaks <- unique(.breaks)
   
   ## grid + overlay of HI
   png(filename = .file, width = 1900, height = 1500, res = 200)
   
   plot(
     r,
-    breaks = .n,
-    breakby = 'cases',
-    col = viridis(.n),
+    breaks = .breaks,
+    # breakby = 'cases',
+    col = hcl.colors(n = length(.breaks), palette = .pal),
     plg = list(x = 'bottomleft', cex = 1),
     axes = FALSE,
     mar = c(1.5, 1, 1, 1),
@@ -117,10 +127,15 @@
 }
 
 
-.CONUS_DensityMap <- function(r, .file, .title, .g, .n = 10) {
+.CONUS_DensityMap <- function(r, .file, .title, .g, .n = 10, .pal = 'viridis') {
   
   # close device on error
-  on.exit(dev.off(), add = TRUE)
+  on.exit(try(dev.off(), silent = TRUE), add = TRUE)
+  
+  # quantile-based classes
+  # can't have duplicate values (long-tailed distributions)
+  .breaks <- quantile(values(r), na.rm = TRUE, probs = seq(0, 1, length.out = .n))
+  .breaks <- unique(.breaks)
   
   # get CONUS extent and expand by ~ 100km = 100,000m
   b <- ext(us_states)
@@ -131,9 +146,9 @@
   
   plot(
     r,
-    breaks = 10,
-    breakby = 'cases',
-    col = viridis(.n),
+    breaks = .breaks,
+    # breakby = 'cases',
+    col = hcl.colors(n = length(.breaks), palette = .pal),
     plg = list(x = 'bottomleft', cex = 1, ncol = 2),
     axes = FALSE,
     mar = c(3, 1, 1.5, 0.5),
@@ -205,8 +220,8 @@
   ##            -> consider performing intersection in GCS
   ## exclude CONUS for efficiency
   .idx <- which(! x$LogID %in% x.conus$LogID)
-  x.hi <- intersect(project(x[.idx, ], crs.hi), hi)
-  x.pr <- intersect(project(x[.idx, ], crs.pr), pr)
+  x.hi <- intersect(project(x[.idx, ], hi), hi)
+  x.pr <- intersect(project(x[.idx, ], pr), pr)
   # x.ak <- intersect(x[.idx, ], ak)
   
   ## cleanup
@@ -258,9 +273,9 @@
   )
   
   ## save for GIS use
-  writeRaster(r.conus, filename = f.conus, datatype = "INT2S", overwrite = TRUE)
-  writeRaster(r.pr, filename = f.pr, datatype = "INT2S", overwrite = TRUE)
-  writeRaster(r.hi, filename = f.hi, datatype = "INT2S", overwrite = TRUE)
+  writeRaster(r.conus, filename = f.conus, datatype = "INT2U", overwrite = TRUE)
+  writeRaster(r.pr, filename = f.pr, datatype = "INT2U", overwrite = TRUE)
+  writeRaster(r.hi, filename = f.hi, datatype = "INT2U", overwrite = TRUE)
   
 }
 

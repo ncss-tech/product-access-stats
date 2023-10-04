@@ -2,11 +2,14 @@
 ##
 ##
 
+## TODO:
+#  * better contrast for highly skewed distributions
+#  * split by FY
+#  * monthly averages
+#  * split by season
 
-# library(sp)
+
 library(latticeExtra)
-# library(rasterVis)
-library(viridisLite)
 library(sf)
 library(spData) 
 library(terra)
@@ -41,6 +44,7 @@ us_states <- project(us_states, crs.conus)
 # local CRS for AK, HI, PR
 pr <- project(pr, crs.pr)
 hi <- project(hi, crs.hi)
+
 # TODO AK
 
 
@@ -64,8 +68,6 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 .PR_DensityMap(r, .file = .of, .title = .title, .g = g.pr)
 
 
-
-## TODO: these are broken, terra::plot() BS
 
 ## App 2.x
 .prefix <- 'app-2x'
