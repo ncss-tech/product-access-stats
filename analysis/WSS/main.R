@@ -2,8 +2,12 @@
 ##
 ##
 
-## TODO: move to local disk
-## TODO: consolidate intermediate files
+## TODO: 
+##  * move to local disk / server
+##  * consolidate intermediate files
+##  * prepare density maps by year / region
+##  * add SoilWeb weekday / seasonal summaries
+
 
 
 ## data are stored locally for now

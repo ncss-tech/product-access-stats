@@ -28,7 +28,12 @@ s <- na.omit(s)
 # for clarity, convert AOI density counts / 10x10 km -> counts / 1x1 km
 s$AOI_density_1x1 <- s$AOI_density / 100
 
-# 
+# color ramp
+.cr <- function(...) {
+  hcl.colors(..., palette = 'mako')
+}
+
+
 
 
 agg_png(filename = '../../results/WSS/WSS-AOI-vs-popdens-hexbin.png', width = 1500, height = 1500, scaling = 3)
@@ -37,10 +42,10 @@ print(
   
   hexbinplot(AOI_density_1x1 ~ population_density, data=s, 
              scales=list(log=10, alternating=3), asp=1, xbins=60,
-             main='Web Soil Survey AOI Centroid Density\n2015-2023',
+             main='Web Soil Survey AOI Centroid Density\n2015-2024',
              ylab='AOI Density (AOI / sq. km)',
              xlab='Population Density (person / sq. km)',
-             colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+             colramp = .cr, trans = log, inv = exp, colorkey = FALSE,
              xscale.components=xscale.components.log10ticks, 
              yscale.components=yscale.components.log10ticks, 
              panel=function(...) {
