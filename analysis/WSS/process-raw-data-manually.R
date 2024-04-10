@@ -179,3 +179,29 @@ range(x$date)
 # ~ 1 minute
 write.csv(x, file = gzfile(file.path(wd, 'data', 'WSS-centroids-02-2023.csv.gz')), row.names = FALSE)
 
+
+##### 2024-04-08 new file
+# 3730576 rows
+# "2023-02-20" "2024-03-19"
+x <- read_delim(file.path(wd, 'data', 'Centroid_02202023_03202024.csv'), delim = ',', na = '', col_names = TRUE, guess_max = 1e6)
+x <- as.data.frame(x)
+
+head(x)
+nrow(x)
+
+x$date <- as.Date(x$log_date, format='%m-%d-%y')
+x$x <- x$long_x
+x$y <- x$lat_y
+
+x <- x[, c('LogID', 'x', 'y', 'date')]
+
+# ok
+head(x)
+range(x$date)
+
+# ~ 1 minute
+write.csv(x, file = gzfile(file.path(wd, 'data', 'WSS-centroids-04-2024.csv.gz')), row.names = FALSE)
+
+# clean up
+rm(x) ; gc(reset = TRUE)
+

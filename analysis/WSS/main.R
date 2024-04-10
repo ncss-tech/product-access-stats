@@ -25,7 +25,7 @@ source('AOI-daily-TS-evaluation.R')
 
 ## create point density grids
 # CONUS, PR, Hi
-# ~ 14 minutes
+# ~ 16 minutes
 source('prepare-density-grids.R')
 
 

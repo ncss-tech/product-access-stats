@@ -34,8 +34,8 @@ x.daily$mo <- factor(
 
 
 ## TODO: automate this
-# smooth over ... what
-x.ts <- ts(x.daily$freq, frequency = 30, start = c(2015, 04, 01))
+# smooth over ... 60-day window
+x.ts <- ts(x.daily$freq, frequency = 60, start = c(2015, 04, 01))
 
 # STL decomposition
 x.stl <- stl(x.ts, s.window = 'periodic')
@@ -47,17 +47,22 @@ d$date <- x.daily$date
 d$raw <- x.daily$freq
 names(d) <- c('Seasonal', 'Trend', 'Remainder', 'date', 'Raw Data')
 
+d$year <- as.integer(format(d$date, "%Y"))
+d$doy <- as.integer(format(d$date, "%j"))
+d$wkday <- factor((format(d$date, "%a")), levels = c('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'), ordered = TRUE)
+d$month <- factor(format(d$date, "%b"), levels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
 
-m <- reshape2::melt(d, id.vars = 'date', measure.vars = c('Trend', 'Raw Data'))
+
+m <- reshape2::melt(d, id.vars = c('date'), measure.vars = c('Trend', 'Raw Data'))
 
 # last updated 
-u.date <- as.character(max(x.daily$date, na.rm=TRUE))
+u.date <- as.character(max(x.daily$date, na.rm = TRUE))
 
 
 ## this is a bit of a hack--works best when data end on the first day of the next month
 
 # labels for x-axis
-d.seq <- seq.Date(from = min(x.daily$date), to = max(x.daily$date), by='6 months')
+d.seq <- seq.Date(from = min(x.daily$date), to = max(x.daily$date), by = '6 months')
 d.seq <- c(d.seq, max(x.daily$date) + 1)
 
 ## figure
@@ -65,7 +70,7 @@ p <- xyplot(
   value ~ date | variable, 
   data = m, 
   main = paste('Web Soil Survey: updated',  u.date), 
-  sub = 'Timeseries Decomposition by STL (1 month period)', 
+  sub = 'Timeseries Decomposition by STL (60-day period)', 
   type = 'l',
   xlim = c(min(d.seq) - 15, max(d.seq) + 15),
   layout = c(1, 2), 
@@ -92,7 +97,70 @@ p <- xyplot(
   })
 
 filename <- file.path(.figureOutput, 'WSS_AOI_daily-ts-decomposition.png')
-agg_png(filename = filename, width = 1800, height = 800, res = 100, scaling = 1.5)
+agg_png(filename = filename, width = 2400, height = 800, res = 100, scaling = 1.5)
+print(p)
+dev.off()
+
+
+
+
+## compare years
+
+m <- reshape2::melt(d, id.vars = c('year', 'month', 'wkday', 'doy'), measure.vars = c('Trend', 'Raw Data'))
+
+mm <- reshape2::dcast(m, year + month + wkday ~ variable, fun.aggregate = sum, na.rm = TRUE)
+
+
+.cols <- hcl.colors(50, palette = 'zissou1', rev = FALSE)
+
+p <- levelplot(
+  `Raw Data` ~ wkday * year | month, 
+  data = mm, 
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = '', ylab = '',
+  main = 'Web Soil Survey Daily AOI Created', 
+  sub = paste0('updated: ',  u.date), 
+  strip = strip.custom(bg = grey(0.90)), 
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 0.85, alternating = 1),
+    y = list(alternating = 3)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'WSS_AOI_day-of-week-grid.png')
+agg_png(filename = filename, width = 1400, height = 900, scaling = 1.5)
+print(p)
+dev.off()
+
+
+
+## 
+mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = sum, na.rm = TRUE)
+
+
+p <- levelplot(
+  Trend ~ doy * year,
+  data = mm, 
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = 'Day of Year', ylab = '',
+  main = 'Web Soil Survey Daily AOI Created (60-day Trend)', 
+  sub = paste0('updated: ',  u.date), 
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 1, alternating = 1, at = seq(0, 360, by = 30)),
+    y = list(alternating = 3, cex = 1)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'WSS_AOI_day-of-year-grid.png')
+agg_png(filename = filename, width = 1400, height = 900, scaling = 2)
 print(p)
 dev.off()
 
@@ -116,10 +184,22 @@ p <- bwplot(yr ~ freq | mo, data = x.daily,
 
 
 filename <- file.path(.figureOutput, 'daily-AOI-by-year-bwplot.png')
-agg_png(filename = filename, width = 1000, height = 900, res = 100)
+agg_png(filename = filename, width = 1200, height = 900, res = 100)
 print(p)
 dev.off()
 
+
+bwplot(mo ~ freq | yr, data = x.daily,
+            as.table = TRUE,
+            par.settings = tactile.theme(),
+            scales = list(alternating = 3),
+            xlab = 'AOI per Day',
+            main = paste('Updated:',  u.date),
+            panel = function(...) {
+              panel.grid(-1, -1)
+              panel.bwplot(...)
+            }
+)
 
 
 

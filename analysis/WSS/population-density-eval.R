@@ -1,28 +1,24 @@
-library(raster)
-library(sp)
+library(terra)
 library(hexbin)
 library(latticeExtra)
-library(viridis)
+library(ragg)
 
 
 ## AOI density, counts / 10x10 grid cells
-r <- raster('../../GIS/WSS/AOI-density-2015-2021.tif')
-
-# mean monthly version: that looks strange...
-# r <- raster('AOI-density-mean-monthly.tif')
+r <- rast('../../GIS/WSS/AOI-density.tif')
 
 ## population density CONUS only
 
 # pop density grid
 # Gridded Population of the World Version 3 (GPWv3): Population Density Grids.
 # ds00g  population densities in 2000, unadjusted, persons per square km
-pd <- raster('S:/NRCS/Archive_Dylan_Beaudette/SoilWeb/soilweb-vs-gridded-pop-density/usadens/usads00g/hdr.adf')
+pd <- rast('S:/NRCS/Archive_Dylan_Beaudette/SoilWeb/soilweb-vs-gridded-pop-density/usadens/usads00g/hdr.adf')
 
 # quick comparison via sampling
-s <- sampleRegular(r, 100000, sp=TRUE)
-s$pd <- extract(pd, s)
+s <- spatSample(r, size = 100000, method = 'regular', as.points = TRUE)
+s$pd <- extract(pd, s)$hdr
 s <- as.data.frame(s)
-names(s) <- c('AOI_density', 'population_density', 'x', 'y')
+names(s) <- c('AOI_density', 'population_density')
 
 # remove 0 for safe log-transform
 s$population_density[s$population_density < 1] <- NA
@@ -35,7 +31,7 @@ s$AOI_density_1x1 <- s$AOI_density / 100
 # 
 
 
-png(file = '../../results/WSS/WSS-AOI-vs-popdens-hexbin.png', width=900, height=900, res = 120, type = 'windows', antialias = 'cleartype')
+agg_png(filename = '../../results/WSS/WSS-AOI-vs-popdens-hexbin.png', width = 1500, height = 1500, scaling = 3)
 
 print(
   
@@ -57,19 +53,19 @@ print(
                
                # reference points c/o wikipedia
                
-               p.sf <- cbind(x = log(6658, base = 10), y = log(300, base = 10))
+               p.sf <- cbind(x = log(6658, base = 10), y = log(400, base = 10))
                panel.text(p.sf, label = 'San Francisco, CA', col = 'firebrick', cex = 0.66, font = 2)
                panel.text(p.sf, label = '\u2193', col = 'firebrick', cex = 1, font = 2, pos = 1)
                
-               p.nc <- cbind(x = log(80.6, base = 10), y = log(300, base = 10))
+               p.nc <- cbind(x = log(80.6, base = 10), y = log(400, base = 10))
                panel.text(p.nc, label = 'North Carolina', col = 'firebrick', cex = 0.66, font = 2)
                panel.text(p.nc, label = '\u2193', col = 'firebrick', cex = 1, font = 2, pos = 1)
                
-               p.ne <- cbind(x = log(9.63, base = 10), y = log(300, base = 10))
+               p.ne <- cbind(x = log(9.63, base = 10), y = log(400, base = 10))
                panel.text(p.ne, label = 'Nebraska', col = 'firebrick', cex = 0.66, font = 2)
                panel.text(p.ne, label = '\u2193', col = 'firebrick', cex = 1, font = 2, pos = 1)
                
-               p.wy <- cbind(x = log(2.3, base = 10), y = log(300, base = 10))
+               p.wy <- cbind(x = log(2.3, base = 10), y = log(400, base = 10))
                panel.text(p.wy, label = 'Wyoming', col = 'firebrick', cex = 0.66, font = 2)
                panel.text(p.wy, label = '\u2193', col = 'firebrick', cex = 1, font = 2, pos = 1)
              }
@@ -94,7 +90,7 @@ d <- density(na.omit(log(s$population_density[idx], base=10)))
 d <- data.frame(x=d$x, y=d$y)
 
 # plot, note trick used to fool lattice into re-computing log-scale x-axis
-png(file='../../results/WSS/median-AOI-vs-popdens.png', width=800, height=600, res=100, type='windows', antialias='cleartype')
+ragg::agg_png(filename = '../../results/WSS/median-AOI-vs-popdens.png', width = 800, height = 600, scaling = 1.5)
 
 print(
   xyplot(y ~ 10^x, data=d, type=c('l', 'g'), main='Web Soil Survey\nAOI Centroid Density > 50th pctile\n2015-2023', xlab=list(cex=1.25, label='Population Density (person / sq. km)'), ylab='Relative Frequency', col='black', lwd=2, scales=list(cex=1, x=list(log=10)), xscale.components= xscale.components.logpower)
