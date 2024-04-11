@@ -16,7 +16,7 @@ x <- subset(x.daily, subset = date > as.Date('2014-09-01'))
 x$yr <- format(x$date, '%Y')
 
 # init TS object
-x.ts <- ts(x$freq, frequency = 30, start=c(2014, 9, 1))
+x.ts <- ts(x$freq, frequency = 60, start=c(2014, 9, 1))
 
 # STL decomposition
 x.stl <- stl(x.ts, s.window = 'periodic')
@@ -26,6 +26,15 @@ d <- as.data.frame(x.stl$time.series)
 d$date <- x$date
 d$raw <- x$freq
 names(d) <- c('Seasonal', 'Trend', 'Remainder', 'date', 'Raw Data')
+
+
+d$year <- as.integer(format(d$date, "%Y"))
+d$doy <- as.integer(format(d$date, "%j"))
+d$wkday <- factor((format(d$date, "%a")), levels = c('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'), ordered = TRUE)
+d$month <- factor(format(d$date, "%b"), levels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+
+
+
 
 # old version: TMI
 # m <- melt(d, id.vars = 'date')
@@ -45,7 +54,7 @@ d.seq <- seq.Date(from=as.Date('2014-09-01'), to=md, by='4 months')
 
 p <- xyplot(value ~ date | variable, data=m, 
 			subset=value < quantile(x.daily$freq, 0.999, na.rm=TRUE),
-            main=paste('SoilWeb Gmaps\nupdated',  u.date), sub='Timeseries Decomposition by STL (1 month period)', 
+            main=paste('SoilWeb Gmaps\nupdated',  u.date), sub='Timeseries Decomposition by STL (60-day period)', 
             type='l', 
 			xlim=c(min(d.seq)-10, md+10),
             layout=c(1,2), 
@@ -79,6 +88,82 @@ filename <- file.path(.figureOutput, 'gmap_yearly-bwplot.png')
 agg_png(filename = filename, width = 1000, height = 450, res = 100)
 print(p)
 dev.off()
+
+
+
+## compare years
+
+m <- reshape2::melt(d, id.vars = c('year', 'month', 'wkday', 'doy'), measure.vars = c('Trend', 'Raw Data'))
+
+# take mean over all week days within a year / month
+mm <- reshape2::dcast(m, year + month + wkday ~ variable, fun.aggregate = mean, na.rm = TRUE)
+
+# convert raw data to percentiles
+e <- ecdf(mm$`Raw Data`)
+mm$pctile <- e(mm$`Raw Data`)
+
+.cols <- hcl.colors(50, palette = 'zissou1', rev = FALSE)
+
+p <- levelplot(
+  pctile ~ wkday * year | month, 
+  data = mm, 
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = '', ylab = '',
+  main = 'SoilWeb Gmap Daily Queries (Percentile)', 
+  sub = paste0('updated: ',  u.date), 
+  strip = strip.custom(bg = grey(0.90)), 
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 0.85, alternating = 1),
+    y = list(alternating = 3)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'gmap_day-of-week-grid.png')
+agg_png(filename = filename, width = 1200, height = 900, scaling = 1.5)
+print(p)
+dev.off()
+
+
+
+
+## 
+mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = mean, na.rm = TRUE)
+
+# convert trend to percentiles
+e <- ecdf(mm$Trend)
+mm$pctile <- e(mm$Trend)
+
+
+p <- levelplot(
+  pctile ~ doy * year,
+  data = mm, 
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = 'Day of Year', ylab = '',
+  main = 'SoilWeb Gmap Daily Queries (Percentiles, 60-day Trend)', 
+  sub = paste0('updated: ',  u.date), 
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 1, alternating = 1, at = seq(0, 360, by = 30)),
+    y = list(alternating = 3, cex = 1)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'gmap_day-of-year-grid.png')
+agg_png(filename = filename, width = 1200, height = 900, scaling = 2)
+print(p)
+dev.off()
+
+
+
+
+
 
 
 ## cleanup

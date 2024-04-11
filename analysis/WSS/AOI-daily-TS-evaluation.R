@@ -11,7 +11,7 @@ source('config.R')
 # load combined/pre-processed data
 x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))
 
-# lots of records
+# 2024: 28800000
 nrow(x)
 
 ## hits / day
@@ -108,18 +108,22 @@ dev.off()
 
 m <- reshape2::melt(d, id.vars = c('year', 'month', 'wkday', 'doy'), measure.vars = c('Trend', 'Raw Data'))
 
-mm <- reshape2::dcast(m, year + month + wkday ~ variable, fun.aggregate = sum, na.rm = TRUE)
+# take mean over all week days within a year / month
+mm <- reshape2::dcast(m, year + month + wkday ~ variable, fun.aggregate = mean, na.rm = TRUE)
 
+# convert to percentiles
+e <- ecdf(mm$`Raw Data`)
+mm$pctile <- e(mm$`Raw Data`)
 
 .cols <- hcl.colors(50, palette = 'zissou1', rev = FALSE)
 
 p <- levelplot(
-  `Raw Data` ~ wkday * year | month, 
+  pctile ~ wkday * year | month, 
   data = mm, 
   as.table = TRUE,
   useRaster = TRUE,
   xlab = '', ylab = '',
-  main = 'Web Soil Survey Daily AOI Created', 
+  main = 'Web Soil Survey Daily AOI Created (Percentiles)', 
   sub = paste0('updated: ',  u.date), 
   strip = strip.custom(bg = grey(0.90)), 
   colorkey = list(space = 'top'),
@@ -132,23 +136,26 @@ p <- levelplot(
 
 
 filename <- file.path(.figureOutput, 'WSS_AOI_day-of-week-grid.png')
-agg_png(filename = filename, width = 1400, height = 900, scaling = 1.5)
+agg_png(filename = filename, width = 1200, height = 900, scaling = 1.5)
 print(p)
 dev.off()
 
 
 
 ## 
-mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = sum, na.rm = TRUE)
+mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = mean, na.rm = TRUE)
 
+# convert to percentiles
+e <- ecdf(mm$Trend)
+mm$pctile <- e(mm$Trend)
 
 p <- levelplot(
-  Trend ~ doy * year,
+  pctile ~ doy * year,
   data = mm, 
   as.table = TRUE,
   useRaster = TRUE,
   xlab = 'Day of Year', ylab = '',
-  main = 'Web Soil Survey Daily AOI Created (60-day Trend)', 
+  main = 'Web Soil Survey Daily AOI Created (Percentiles, 60-day Trend)', 
   sub = paste0('updated: ',  u.date), 
   colorkey = list(space = 'top'),
   par.settings = tactile.theme(regions = list(col = .cols)),
@@ -160,7 +167,7 @@ p <- levelplot(
 
 
 filename <- file.path(.figureOutput, 'WSS_AOI_day-of-year-grid.png')
-agg_png(filename = filename, width = 1400, height = 900, scaling = 2)
+agg_png(filename = filename, width = 1200, height = 900, scaling = 2)
 print(p)
 dev.off()
 

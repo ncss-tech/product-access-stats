@@ -13,6 +13,10 @@
 ## data are stored locally for now
 wd <- 'S:/NRCS/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
 
+# local copy
+wd <- 'E:/backup/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
+
+
 
 ## re-build .csv.gz versions of the source data
 ## this has do be done manually, each file is slightly different
