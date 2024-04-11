@@ -2,7 +2,7 @@
 
  * process by chunk
  * consider better control over thematic maps via classInt pkg
- * alternatives to log-transform
+ 
 
 ## WSS
 
@@ -14,3 +14,5 @@
 ## SoilWeb
 
  * add `LogID` column
+
+

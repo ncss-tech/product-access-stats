@@ -18,6 +18,13 @@ Updated semi-annually.
 <br>
 ![](results/WSS/daily-AOI-by-year-bwplot.png)
 
+#### AOI By Day of Week and Day of Year
+![](results/WSS/WSS_AOI_day-of-week-grid.png)
+<br>
+<br>
+![](results/WSS/WSS_AOI_day-of-year-grid.png)
+
+
 ### AOI Creation vs Population Density
 ![](results/WSS/WSS-AOI-vs-popdens-hexbin.png)
 ![](results/WSS/median-AOI-vs-popdens.png)
@@ -40,11 +47,17 @@ Updated semi-annually.
 ![SoilWeb Gmaps Application: Requests per Day](results/SoilWeb/gmap_daily-ts-decomposition.png)
 ![SoilWeb Gmaps Application: Requests per Day / Year](results/SoilWeb/gmap_yearly-bwplot.png)
 
+![SoilWeb Gmaps Application: Requests per Day / Year](results/SoilWeb/gmap_day-of-week-grid.png)
+![SoilWeb Gmaps Application: Requests per Day / Year](results/SoilWeb/gmap_day-of-year-grid.png)
+
 ### iOS and Android Smartphone Applications
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density.png)
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density-HI.png)
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density-PR.png)
 ![SoilWeb Smartphone App: Requests per Day](results/SoilWeb/app-2x_daily-ts-decomposition.png)
+
+![SoilWeb Gmaps Application: Requests per Day / Year](results/SoilWeb/app-2x_day-of-week-grid.png)
+![SoilWeb Gmaps Application: Requests per Day / Year](results/SoilWeb/app-2x_day-of-year-grid.png)
 
 ### Google Earth Application
 ![SoilWeb Google Earth: Requests per Day](https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb-stats/GE-requests-daily.png)
