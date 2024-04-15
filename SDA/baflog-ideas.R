@@ -1,11 +1,15 @@
+
+## TODO:
+## * integrate with WSS and SoilWeb
+## * split into point, bbox, polygon queries
+
+
 library(readr)
-library(sf)
 library(terra)
 library(stringi)
 library(spData)
 
 # 10104148 rows
-
 x <- read_csv('E:/temp/SDA_baflogs_Metrics_Spatial_22_23_v3.csv')
 nrow(x)
 x <- as.data.frame(x)
@@ -47,6 +51,7 @@ p <- x[x$geometry_type == 'point', ]
 .xy <- .xy[.xy$x >= -180 & .xy$x <= 180, ]
 .xy <- .xy[.xy$y >= -90 & .xy$y <= 90, ]
 
+# 147607
 nrow(.xy)
 
 z <- vect(.xy, geom = c('x', 'y'), crs = 'EPSG:4269')
@@ -59,4 +64,4 @@ us_states <- project(us_states, 'epsg:5070')
 z <- project(z, 'epsg:5070')
 
 plot(us_states, axes = FALSE, mar = c(0, 0, 0, 0))
-points(z, cex = 0.25, col = 4)
+points(z, cex = 0.25, col = 'royalblue')
