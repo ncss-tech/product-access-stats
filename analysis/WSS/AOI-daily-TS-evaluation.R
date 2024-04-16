@@ -70,7 +70,7 @@ p <- xyplot(
   value ~ date | variable, 
   data = m, 
   main = paste('Web Soil Survey: updated',  u.date), 
-  sub = 'Timeseries Decomposition by STL (60-day period)', 
+  sub = 'Timeseries Decomposition (60-day period)', 
   type = 'l',
   xlim = c(min(d.seq) - 15, max(d.seq) + 15),
   layout = c(1, 2), 

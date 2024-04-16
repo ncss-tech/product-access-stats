@@ -1,6 +1,6 @@
 
 ## paths
-.input <- 'S:/NRCS/Archive_Dylan_Beaudette/NSSC/WSS-access-stats/data'
+.input <- 'E:/backup/Archive_Dylan_Beaudette/NSSC/WSS-access-stats/data'
 .gridOutput <- '../../GIS/WSS'
 .outlines <- '../../GIS/outlines'
 .figureOutput <- '../../results/WSS'
