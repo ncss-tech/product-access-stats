@@ -1,7 +1,3 @@
-##
-##
-##
-
 
 library(plyr) # round_any()
 library(reshape2)
@@ -37,6 +33,9 @@ us_states <- project(us_states, 'EPSG:4326')
 # WSS AOI
 x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
+## iterate over year-month subsets
+
+
 # ~ 22 minutes (3x spatial intersection with full dataset)
 # ~ 13 minutes (intersection on indexed-subset for AK, HI, PR)
 # system.time(.makeGrids(x, .prefix = 'AOI', .output = .gridOutput))
@@ -44,5 +43,3 @@ x <- readRDS(file.path(.input, 'AOI-points.rds'))
 # done
 rm(x)
 gc(reset = TRUE)
-
-
