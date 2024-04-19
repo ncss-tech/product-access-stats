@@ -105,7 +105,7 @@ p <- xyplot(
   })
 
 filename <- file.path(.figureOutput, 'SDA_daily-ts-decomposition.png')
-agg_png(filename = filename, width = 2400, height = 800, res = 100, scaling = 1.5)
+agg_png(filename = filename, width = 1800, height = 800, res = 100, scaling = 1.5)
 print(p)
 dev.off()
 
