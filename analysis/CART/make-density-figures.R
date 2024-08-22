@@ -2,9 +2,9 @@
 ##
 ##
 
-library(latticeExtra)
-library(rasterVis)
-library(viridisLite)
+# library(latticeExtra)
+# library(rasterVis)
+# library(viridisLite)
 library(sf)
 library(spData) 
 library(terra)

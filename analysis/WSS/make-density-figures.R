@@ -3,7 +3,7 @@
 ##
 
 
-library(latticeExtra)
+
 library(sf)
 library(spData) 
 library(terra)
