@@ -3,10 +3,7 @@
 ##
 
 
-library(sp)
 library(latticeExtra)
-library(rasterVis)
-library(viridisLite)
 library(sf)
 library(spData) 
 library(terra)
@@ -51,7 +48,7 @@ hi <- project(hi, crs.hi)
 # CONUS
 r <- rast(file.path(.gridOutput, sprintf("%s-density.tif", .prefix)))
 .of <- file.path(.figureOutput, sprintf('%s-density.png', .prefix))
-.CONUS_DensityMap(r, .file = .of, .title = .title, .g = g.conus, .n = 10)
+.CONUS_DensityMap(r, .file = .of, .title = .title, .g = g.conus)
 
 # HI
 r <- rast(file.path(.gridOutput, sprintf("%s-density-HI.tif", .prefix)))
