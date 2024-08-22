@@ -42,6 +42,10 @@ Updated semi-annually.
 
 ## CART
 
+### AOI Centroid Density Maps
+![](results/CART/AOI-density.png)
+![](results/CART/AOI-density-HI.png)
+![](results/CART/AOI-density-PR.png)
 
 
 
