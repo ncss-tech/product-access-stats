@@ -1,19 +1,15 @@
-.PR_DensityMap <- function(r, .file, .title, .g, .n = 10, .pal = 'oslo', .rev = FALSE) {
+.PR_DensityMap <- function(r, .file, .title, .g, .n = 10, .pal = 'blues3', .rev = TRUE) {
   
   # close device on error
   on.exit(try(dev.off(), silent = TRUE), add = TRUE)
   
-  # quantile-based classes
-  # can't have duplicate values (long-tailed distributions)
-  .breaks <- quantile(values(r), na.rm = TRUE, probs = seq(0, 1, length.out = .n))
-  .breaks <- unique(.breaks)
+  # histogram for legend
+  h <- hist(log(r,  base = 10), plot = FALSE, breaks = 20)
   
-  png(filename = .file, width = 2200, height = 900, res = 200)
+  png(filename = .file, width = 2200, height = 1200, res = 200)
   
   plot(
     r,
-    # breaks = quantile(values(r), na.rm = TRUE, probs = seq(0.1, 1, length.out = .n)),
-    breakby = 'cases',
     col = hcl.colors(n = 100, palette = .pal, rev = .rev),
     legend = FALSE,
     axes = FALSE,
@@ -22,7 +18,27 @@
     main = .title
   )
   lines(pr, lwd = 2)
-  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1)
+  
+  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1, line = 2.5, adj = 0.7)
+  
+  par(fig = c(0.01, 0.55, 0.06, 0.29), new = TRUE, mar = c(0, 0, 0, 0), xpd = NA) 
+  
+  plot(h, col = hcl.colors(n = length(h$breaks), pal = .pal, rev = .rev), axes = FALSE, xlab = '', ylab = '', main = '')
+  
+  .lab <- quantile(r[], probs = c(0, 0.1, 0.3, 0.5, 0.75, 0.95, 0.99, 0.999, 1), na.rm = TRUE)
+  .lab <- unique(.lab)
+  .lab <- round(.lab)
+  
+  
+  
+  .usr <- par('usr')
+  .offset <- .usr[3] + (.usr[3] * 0.85)
+  points(h$mids, rep(.offset, times = length(h$mids)), pch = 15, col = hcl.colors(n = length(h$mids), pal = .pal, rev = .rev), cex = 2)
+  
+  # TODO use plyr::round_any() on "large" numbers
+  
+  .at <- log(pmax(.lab, 1), base = 10)
+  axis(side = 1, at = .at, labels = .lab, cex.axis = 0.95, padj = -1.5, line = 0.85, tick = FALSE)
   
   dev.off()
   
@@ -31,13 +47,13 @@
 }
 
 
-.HI_DensityMap <- function(r, .file, .title, .g, .n = 10, .pal = 'oslo', .rev = FALSE) {
+.HI_DensityMap <- function(r, .file, .title, .g, .n = 10, .pal = 'blues3', .rev = TRUE) {
   
   # close device on error
   on.exit(try(dev.off(), silent = TRUE), add = TRUE)
   
   # histogram for legend
-  h <- hist(log(r,  base = 10), plot = FALSE)
+  h <- hist(log(r,  base = 10), plot = FALSE, breaks = 20)
   
   ## grid + overlay of HI
   png(filename = .file, width = 1900, height = 1500, res = 200)
@@ -54,19 +70,27 @@
   
   lines(hi, lwd = 2)
   
-  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1, line = 3, adj = 1)
+  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1, line = 2.5, adj = 0.7)
   
-  par(fig = c(0.01, 0.55, 0.05, 0.25), new = TRUE, mar = c(0, 0, 0, 0)) 
+  par(fig = c(0.01, 0.55, 0.06, 0.29), new = TRUE, mar = c(0, 0, 0, 0), xpd = NA) 
+  
   plot(h, col = hcl.colors(n = length(h$breaks), pal = .pal, rev = .rev), axes = FALSE, xlab = '', ylab = '', main = '')
   
   .lab <- quantile(r[], probs = c(0, 0.1, 0.3, 0.5, 0.75, 0.95, 0.99, 0.999, 1), na.rm = TRUE)
   .lab <- unique(.lab)
   .lab <- round(.lab)
   
+  
+  
+  .usr <- par('usr')
+  .offset <- .usr[3] + (.usr[3] * 0.85)
+  points(h$mids, rep(.offset, times = length(h$mids)), pch = 15, col = hcl.colors(n = length(h$mids), pal = .pal, rev = .rev), cex = 2)
+  
   # TODO use plyr::round_any() on "large" numbers
   
   .at <- log(pmax(.lab, 1), base = 10)
-  axis(side = 1, at = .at, labels = .lab, cex.axis = 0.75, padj = -0.5)
+  axis(side = 1, at = .at, labels = .lab, cex.axis = 0.95, padj = -1.5, line = 0.85, tick = FALSE)
+  
   
   dev.off()
   

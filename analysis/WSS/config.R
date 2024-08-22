@@ -21,7 +21,7 @@ crs.hi <- 'EPSG:6628'
 ## grid spacing, km
 # ~ 40 sq. mi. -> 10,180m grid cells --> 10km x 10km is about right
 g.conus <- 10
-g.pr <- 5
+g.pr <- 2
 g.hi <- 5
 g.ak <- 10
 
