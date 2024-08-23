@@ -24,7 +24,7 @@ source('prepare-data.R')
 source('daily-TS-evaluation.R')
 
 
-## create point density grids
+## create point density grids 
 # CONUS, PR, Hi
 # ~ 35 seconds
 source('prepare-density-grids.R')

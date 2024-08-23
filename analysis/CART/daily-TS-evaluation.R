@@ -8,7 +8,7 @@ library(ragg)
 source('config.R')
 
 # load combined/pre-processed data
-x <- fread('../../CART_Soils_Centroid_x_y_20240820_v2.csv', na.strings = 'NULL')
+x <- fread('../../CART_4_years_sda.csv', na.strings = 'NULL')
 
 # 2024: 1256702
 nrow(x)
@@ -44,7 +44,7 @@ x.daily$mo <- factor(
 
 ## TODO: automate this
 # smooth over ... 7-day window
-x.ts <- ts(x.daily$freq, frequency = 7, start = c(2023, 08, 21))
+x.ts <- ts(x.daily$freq, frequency = 60, start = c(2023, 08, 21))
 
 # STL decomposition
 x.stl <- stl(x.ts, s.window = 'periodic')
@@ -71,7 +71,7 @@ u.date <- as.character(max(x.daily$date, na.rm = TRUE))
 ## this is a bit of a hack--works best when data end on the first day of the next month
 
 # labels for x-axis
-d.seq <- seq.Date(from = min(x.daily$date), to = max(x.daily$date), by = '1 months')
+d.seq <- seq.Date(from = min(x.daily$date), to = max(x.daily$date), by = '3 months')
 # d.seq <- c(d.seq, max(x.daily$date) + 1)
 
 ## figure
@@ -79,7 +79,7 @@ p <- xyplot(
   value ~ date | variable, 
   data = m, 
   main = paste('CART: updated',  u.date), 
-  sub = 'Timeseries Decomposition (7-day period)', 
+  sub = 'Timeseries Decomposition (60-day period)', 
   type = 'l',
   xlim = c(min(d.seq) - 15, max(d.seq) + 15),
   layout = c(1, 2), 
@@ -96,7 +96,7 @@ p <- xyplot(
     )
   ), 
   # par.settings = tactile.theme(),
-  col = 'royalblue', lwd = 1.5, 
+  col = 'royalblue', lwd = 1.25, 
   strip = strip.custom(bg = grey(0.90)), 
   ylab = 'Queries per Day', xlab = '', 
   panel = function(...) {
@@ -111,119 +111,225 @@ print(p)
 dev.off()
 
 
-## cleanup
-rm(list = ls())
-gc(reset = TRUE)
-
 
 
 
 #### these require > 1 year of data
 
-# 
-# ## compare years
-# 
-# m <- reshape2::melt(d, id.vars = c('year', 'month', 'wkday', 'doy'), measure.vars = c('Trend', 'Raw Data'))
-# 
-# # take mean over all week days within a year / month
-# mm <- reshape2::dcast(m, year + month + wkday ~ variable, fun.aggregate = mean, na.rm = TRUE)
-# 
-# # convert to percentiles
-# e <- ecdf(mm$`Raw Data`)
-# mm$pctile <- e(mm$`Raw Data`)
-# 
-# .cols <- hcl.colors(50, palette = 'zissou1', rev = FALSE)
-# 
-# p <- levelplot(
-#   pctile ~ wkday * year | month, 
-#   data = mm, 
-#   as.table = TRUE,
-#   useRaster = TRUE,
-#   xlab = '', ylab = '',
-#   main = 'Soil Data Access Daily Queries (Percentiles)', 
-#   sub = paste0('updated: ',  u.date), 
-#   strip = strip.custom(bg = grey(0.90)), 
-#   colorkey = list(space = 'top'),
-#   par.settings = tactile.theme(regions = list(col = .cols)),
-#   scales = list(
-#     x = list(cex = 0.85, alternating = 1),
-#     y = list(alternating = 3)
-#   )
-# )
-# 
-# 
-# filename <- file.path(.figureOutput, 'SDA_day-of-week-grid.png')
-# agg_png(filename = filename, width = 1200, height = 900, scaling = 1.5)
-# print(p)
-# dev.off()
-# 
-# 
-# 
-# ## 
-# mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = mean, na.rm = TRUE)
-# 
-# # convert to percentiles
-# e <- ecdf(mm$Trend)
-# mm$pctile <- e(mm$Trend)
-# 
-# p <- levelplot(
-#   pctile ~ doy * year,
-#   data = mm, 
-#   as.table = TRUE,
-#   useRaster = TRUE,
-#   xlab = 'Day of Year', ylab = '',
-#   main = 'Web Soil Survey Daily AOI Created (Percentiles, 60-day Trend)', 
-#   sub = paste0('updated: ',  u.date), 
-#   colorkey = list(space = 'top'),
-#   par.settings = tactile.theme(regions = list(col = .cols)),
-#   scales = list(
-#     x = list(cex = 1, alternating = 1, at = seq(0, 360, by = 30)),
-#     y = list(alternating = 3, cex = 1)
-#   )
-# )
-# 
-# 
-# filename <- file.path(.figureOutput, 'SDA_day-of-year-grid.png')
-# agg_png(filename = filename, width = 1200, height = 900, scaling = 2)
-# print(p)
-# dev.off()
-# 
-# 
-# 
-# 
-# 
-# ## yearly stats by month
-# p <- bwplot(yr ~ freq | mo, data = x.daily,
-#             as.table = TRUE,
-#             par.settings = tactile.theme(),
-#             layout = c(3, 4),
-#             scales = list(alternating = 3),
-#             xlab = 'AOI per Day',
-#             main = paste('Updated:',  u.date),
-#             panel = function(...) {
-#               panel.grid(-1, -1)
-#               panel.bwplot(...)
-#             }
-# )
-# 
-# 
-# filename <- file.path(.figureOutput, 'daily-AOI-by-year-bwplot.png')
-# agg_png(filename = filename, width = 1200, height = 900, res = 100)
-# print(p)
-# dev.off()
-# 
-# 
-# bwplot(mo ~ freq | yr, data = x.daily,
-#             as.table = TRUE,
-#             par.settings = tactile.theme(),
-#             scales = list(alternating = 3),
-#             xlab = 'AOI per Day',
-#             main = paste('Updated:',  u.date),
-#             panel = function(...) {
-#               panel.grid(-1, -1)
-#               panel.bwplot(...)
-#             }
-# )
-# 
+
+## compare years
+
+m <- reshape2::melt(d, id.vars = c('year', 'month', 'wkday', 'doy'), measure.vars = c('Trend', 'Raw Data'))
+
+# take mean over all week days within a year / month
+mm <- reshape2::dcast(m, year + month + wkday ~ variable, fun.aggregate = mean, na.rm = TRUE)
+
+# convert to percentiles
+e <- ecdf(mm$`Raw Data`)
+mm$pctile <- e(mm$`Raw Data`)
+
+.cols <- hcl.colors(50, palette = 'zissou1', rev = FALSE)
+
+p <- levelplot(
+  pctile ~ wkday * year | month,
+  data = mm,
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = '', ylab = '',
+  main = 'CART Daily AOI Created (Percentiles)',
+  sub = paste0('updated: ',  u.date),
+  strip = strip.custom(bg = grey(0.90)),
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 0.85, alternating = 1),
+    y = list(alternating = 3)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'CART_day-of-week-grid.png')
+agg_png(filename = filename, width = 1200, height = 900, scaling = 1.5)
+print(p)
+dev.off()
+
+
+
+##
+mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = mean, na.rm = TRUE)
+
+# convert to percentiles
+e <- ecdf(mm$Trend)
+mm$pctile <- e(mm$Trend)
+
+p <- levelplot(
+  pctile ~ doy * year,
+  data = mm,
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = 'Day of Year', ylab = '',
+  main = 'CART Daily AOI Created (Percentiles, 60-day Trend)',
+  sub = paste0('updated: ',  u.date),
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 1, alternating = 1, at = seq(0, 360, by = 30)),
+    y = list(alternating = 3, cex = 1)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'CART_day-of-year-grid.png')
+agg_png(filename = filename, width = 1200, height = 900, scaling = 2)
+print(p)
+dev.off()
+
+
+
+
+
+## yearly stats by month
+p <- bwplot(yr ~ freq | mo, data = x.daily,
+            as.table = TRUE,
+            par.settings = tactile.theme(),
+            layout = c(3, 4),
+            scales = list(alternating = 3),
+            xlab = 'AOI per Day',
+            main = paste('Updated:',  u.date),
+            panel = function(...) {
+              panel.grid(-1, -1)
+              panel.bwplot(...)
+            }
+)
+
+
+filename <- file.path(.figureOutput, 'daily-AOI-by-year-bwplot.png')
+agg_png(filename = filename, width = 1200, height = 900, res = 100)
+print(p)
+dev.off()
+
+
+bwplot(mo ~ freq | yr, data = x.daily,
+            as.table = TRUE,
+            par.settings = tactile.theme(),
+            scales = list(alternating = 3),
+            xlab = 'AOI per Day',
+            main = paste('Updated:',  u.date),
+            panel = function(...) {
+              panel.grid(-1, -1)
+              panel.bwplot(...)
+            }
+)
+
+
+
+## compare years
+
+m <- reshape2::melt(d, id.vars = c('year', 'month', 'wkday', 'doy'), measure.vars = c('Trend', 'Raw Data'))
+
+# take mean over all week days within a year / month
+mm <- reshape2::dcast(m, year + month + wkday ~ variable, fun.aggregate = mean, na.rm = TRUE)
+
+# convert to percentiles
+e <- ecdf(mm$`Raw Data`)
+mm$pctile <- e(mm$`Raw Data`)
+
+.cols <- hcl.colors(50, palette = 'zissou1', rev = FALSE)
+
+p <- levelplot(
+  pctile ~ wkday * year | month,
+  data = mm,
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = '', ylab = '',
+  main = 'CART Daily AOI Created (Percentiles)',
+  sub = paste0('updated: ',  u.date),
+  strip = strip.custom(bg = grey(0.90)),
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 0.85, alternating = 1),
+    y = list(alternating = 3)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'CART_day-of-week-grid.png')
+agg_png(filename = filename, width = 1200, height = 900, scaling = 1.5)
+print(p)
+dev.off()
+
+
+
+##
+mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = mean, na.rm = TRUE)
+
+# convert to percentiles
+e <- ecdf(mm$Trend)
+mm$pctile <- e(mm$Trend)
+
+p <- levelplot(
+  pctile ~ doy * year,
+  data = mm,
+  as.table = TRUE,
+  useRaster = TRUE,
+  xlab = 'Day of Year', ylab = '',
+  main = 'CART Daily AOI Created (Percentiles, 60-day Trend)',
+  sub = paste0('updated: ',  u.date),
+  colorkey = list(space = 'top'),
+  par.settings = tactile.theme(regions = list(col = .cols)),
+  scales = list(
+    x = list(cex = 1, alternating = 1, at = seq(0, 360, by = 30)),
+    y = list(alternating = 3, cex = 1)
+  )
+)
+
+
+filename <- file.path(.figureOutput, 'CART_day-of-year-grid.png')
+agg_png(filename = filename, width = 1200, height = 900, scaling = 2)
+print(p)
+dev.off()
+
+
+
+
+
+## yearly stats by month
+p <- bwplot(yr ~ freq | mo, data = x.daily,
+            as.table = TRUE,
+            par.settings = tactile.theme(),
+            layout = c(3, 4),
+            scales = list(alternating = 3),
+            xlab = 'AOI per Day',
+            main = paste('Updated:',  u.date),
+            panel = function(...) {
+              panel.grid(-1, -1)
+              panel.bwplot(...)
+            }
+)
+
+
+filename <- file.path(.figureOutput, 'daily-AOI-by-year-bwplot.png')
+agg_png(filename = filename, width = 1200, height = 900, res = 100)
+print(p)
+dev.off()
+
+
+bwplot(mo ~ freq | yr, data = x.daily,
+            as.table = TRUE,
+            par.settings = tactile.theme(),
+            scales = list(alternating = 3),
+            xlab = 'AOI per Day',
+            main = paste('Updated:',  u.date),
+            panel = function(...) {
+              panel.grid(-1, -1)
+              panel.bwplot(...)
+            }
+)
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
+
 
 

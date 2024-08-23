@@ -16,7 +16,7 @@ x <- subset(x.daily, subset = date > as.Date('2014-09-01'))
 x$yr <- format(x$date, '%Y')
 
 # init TS object
-x.ts <- ts(x$freq, frequency = 60, start=c(2014, 9, 1))
+x.ts <- ts(x$freq, frequency = 60, start = c(2014, 9, 1))
 
 # STL decomposition
 x.stl <- stl(x.ts, s.window = 'periodic')

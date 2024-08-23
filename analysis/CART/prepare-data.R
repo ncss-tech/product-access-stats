@@ -6,12 +6,9 @@
 
 # fast file reading, sorting, and unique() methods
 library(data.table)
-# library(terra)
-# library(sf)
-# library(purrr)
 
 # bogus geometry may result in NULL values for x,y
-x <- fread('../../CART_Soils_Centroid_x_y_20240820_v2.csv', na.strings = 'NULL')
+x <- fread('../../CART_4_years_sda.csv', na.strings = 'NULL')
 
 # there are likely duplicates due to overlap in input files
 x <- unique(x)
@@ -19,7 +16,7 @@ x <- unique(x)
 # proceed as data.frame
 x <- as.data.frame(x)
 
-# 2024: 1,256,702 rows
+# latest: 4,602,217 rows
 nrow(x)
 
 # # check for invalid WKT ... but why?
