@@ -48,16 +48,16 @@ Updated semi-annually.
 ![](results/CART/AOI-density-PR.png)
 
 ### AOI Created per Day
-![](results/CART/CART_AOI_daily-ts-decomposition.png)
+![](results/CART/CART_daily-ts-decomposition.png)
 <br>
 <br>
 ![](results/CART/daily-AOI-by-year-bwplot.png)
 
 #### AOI By Day of Week and Day of Year
-![](results/CART/CART_AOI_day-of-week-grid.png)
+![](results/CART/CART_day-of-week-grid.png)
 <br>
 <br>
-![](results/CART/CART_AOI_day-of-year-grid.png)
+![](results/CART/CART_day-of-year-grid.png)
 
 
 ## SoilWeb
