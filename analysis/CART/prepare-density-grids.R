@@ -7,6 +7,8 @@ library(reshape2)
 library(sf)
 library(spData) 
 library(terra)
+library(purrr)
+
 
 ## local functions
 source('../local-functions.R')

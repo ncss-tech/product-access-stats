@@ -25,3 +25,10 @@ g.pr <- 2
 g.hi <- 5
 g.ak <- 10
 
+
+## extents, in native CRS
+# manually generated from MLRA outlines and CONUS states
+ext.conus <- c(-2356114, 2255906, 279510, 3165722)
+ext.pr <- c(39217, 397957, 183044, 275639)
+ext.hi <- c(8845, 573845, 8573, 383573)
+

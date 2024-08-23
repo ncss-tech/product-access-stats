@@ -112,6 +112,8 @@
   # histogram for legend
   h <- hist(log(r,  base = 10), plot = FALSE)
   
+  ## TODO: add date range
+  
   png(filename = .file, width = 2200, height = 1600, res = 200)
   
   plot(
@@ -121,10 +123,12 @@
     axes = FALSE,
     mar = c(3, 1, 1.5, 0.5),
     maxcell = ncell(r) + 1,
-    main = .title,
+    main = '',
     ylim = y.lim,
     xlim = x.lim
   )
+  
+  title(.title, line = 1)
   
   lines(us_states, lwd = 2)
   
@@ -211,17 +215,52 @@
   .file <- sprintf("processed-data/%s-points-AEA.Rds", .prefix)
   saveRDS(x.conus, file = .file)
   
-  
   ## convert points -> grid of counts, at specified resolution
+  # note rasterize() trick
   message('  point -> grid conversion')
-  r.conus <- pts2grid(x.conus, g = g.conus)
-  r.pr <- pts2grid(x.pr, g = g.pr)
-  r.hi <- pts2grid(x.hi, g = g.hi)
+  
+  
+  ## iterate over year-month chunks, just CONUS
+  .chunkNames <- sort(unique(x.conus$ym))
+  .template <- rast(ext(ext.conus), res = 1000 * g.conus, crs = crs.conus, vals = NA_integer_)
+  
+  .chunks <- map(.chunkNames, .progress = TRUE, .f = function(i) {
+    idx <- which(x.conus$ym == i)
+    
+    .res <- rasterize(x.conus[idx, ], .template, background = NA, fun = function(j){length(j)})
+    
+    names(.res) <- i
+    return(.res)
+    
+  })
+  
+  # list -> multi-band spatRast
+  .chunks <- rast(.chunks)
+  
+  
+  # totals for HI and PR
+  .template <- rast(ext(ext.hi), res = 1000 * g.hi, crs = crs.hi, vals = NA_integer_)
+  r.hi <- rasterize(x.hi, .template, background = NA, fun = function(i){length(i)})
+  
+  .template <- rast(ext(ext.pr), res = 1000 * g.pr, crs = crs.pr, vals = NA_integer_)
+  r.pr <- rasterize(x.pr, .template, background = NA, fun = function(i){length(i)})
+  
+  # .template <- rast(ext(ext.conus), res = 1000 * g.conus, crs = crs.conus, vals = NA_integer_)
+  # r.conus <- rasterize(x.conus, .template, background = NA, fun = function(i){length(i)})
+  
+  # flatten slices -> total
+  r.conus <- app(.chunks, fun = sum, na.rm = TRUE)
+  
   
   ## file names
   f.conus <- file.path(
     .output, 
     sprintf("%s-density.tif", .prefix)
+  )
+  
+  f.conus.stack <- file.path(
+    .output, 
+    sprintf("%s-stack-density.tif", .prefix)
   )
   
   f.pr <- file.path(
@@ -236,14 +275,17 @@
   
   ## save for GIS use
   writeRaster(r.conus, filename = f.conus, datatype = "INT2U", overwrite = TRUE)
+  writeRaster(.chunks, filename = f.conus.stack, datatype = "INT2U", overwrite = TRUE)
   writeRaster(r.pr, filename = f.pr, datatype = "INT2U", overwrite = TRUE)
   writeRaster(r.hi, filename = f.hi, datatype = "INT2U", overwrite = TRUE)
   
 }
 
 ## TODO: wasteful copying / reshaping, can probably be done with grids only
+## replaced by rasterize() in modern terra
 
 pts2grid <- function(p, g) {
+  stop()
   # down-grade to DF
   # this will fail with 0-length spatVect
   x.df <- as.data.frame(p, geom = 'XY')

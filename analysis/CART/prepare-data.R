@@ -63,7 +63,7 @@ x$ym <- format(x$date, "%Y-%m")
 x <- na.omit(x)
 
 
-x <- x[, c('LogID', 'date', 'x', 'y')]
+x <- x[, c('LogID', 'date', 'ym', 'x', 'y')]
 
 # save for later
 saveRDS(x, file = file.path('AOI-points.rds'))

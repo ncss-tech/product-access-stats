@@ -26,13 +26,13 @@ source('daily-TS-evaluation.R')
 
 ## create point density grids 
 # CONUS, PR, Hi
-# ~ 35 seconds
-source('prepare-density-grids.R')
+# 6 minutes serial processing
+system.time(source('prepare-density-grids.R'))
 
 
 ## make density maps
 # CONUS, PR, Hi
-# <2 seconds
+# 30 seconds
 source('make-density-figures.R')
 
 

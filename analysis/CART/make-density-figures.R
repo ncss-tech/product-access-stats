@@ -2,13 +2,12 @@
 ##
 ##
 
-# library(latticeExtra)
-# library(rasterVis)
-# library(viridisLite)
 library(sf)
 library(spData) 
 library(terra)
 library(magick)
+library(purrr)
+library(av)
 
 
 ## local functions
@@ -46,6 +45,9 @@ hi <- project(hi, crs.hi)
 .prefix <- 'AOI'
 .title <- 'CART AOI Centroid Density'
 
+
+# totals
+
 # CONUS
 r <- rast(file.path(.gridOutput, sprintf("%s-density.tif", .prefix)))
 .of <- file.path(.figureOutput, sprintf('%s-density.png', .prefix))
@@ -63,6 +65,39 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 
 
 # TODO AK
+
+
+# time slices for CONUS
+r <- rast(file.path(.gridOutput, sprintf("%s-stack-density.tif", .prefix)))
+nm <- names(r)
+
+.td <- file.path(.figureOutput, 'animation')
+dir.create(.td)
+
+# ~1 minute
+walk(seq_along(nm), .progress = TRUE, .f = function(i) {
+  .of <- file.path(.td, sprintf('%s-density-%03d.png', .prefix, i))
+  
+  .title <- sprintf('CART AOI Centroid Density\n%s', nm[i])
+  
+  .CONUS_DensityMap(r[[i]], .file = .of, .title = .title, .g = g.conus)
+})
+
+
+# animate
+library(av)
+
+# encode as MP4 ~ 8FPS
+f.render <- list.files(.td, pattern = '.png$', full.names = TRUE)
+av_encode_video(
+  input = f.render, 
+  output = 'water-depth-variable-infiltration-highres.mp4', 
+  framerate = 8,
+  # required if image height is not an even number
+  vfilter = "pad=ceil(iw/2)*2:ceil(ih/2)*2"
+)
+
+unlink(.td, recursive = TRUE)
 
 
 ## cleanup
