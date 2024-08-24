@@ -220,22 +220,37 @@
   message('  point -> grid conversion')
   
   
+  ## downgrade spatVect -> data.frame
+  # currently a bug in split.terra
+  x.conus <- as.data.frame(x.conus[, c('date', 'ym')], geom = 'xy')
+  
+  # split to list, for iteration over year-month chunks
+  x.conus <- split(x.conus, x.conus$ym)
+  gc(reset = TRUE)
+  
   ## iterate over year-month chunks, just CONUS
-  .chunkNames <- sort(unique(x.conus$ym))
+  .chunkNames <- sort(names(x.conus))
+  
+  # empty spatRast template for density grids
   .template <- rast(ext(ext.conus), res = 1000 * g.conus, crs = crs.conus, vals = NA_integer_)
   
-  .chunks <- map(.chunkNames, .progress = TRUE, .f = function(i) {
-    idx <- which(x.conus$ym == i)
+  .chunks <- map(x.conus, .progress = TRUE, .f = function(i) {
     
-    .res <- rasterize(x.conus[idx, ], .template, background = NA, fun = function(j){length(j)})
+    # init temp spatVect for this iteration, much faster than subsetting a giant spatVect
+    .v <- vect(i, geom = c('x', 'y'), crs = crs.conus)
     
-    names(.res) <- i
+    # gridded density over template spatRast
+    .res <- rasterize(.v, .template, background = NA, fun = function(j){length(j)})
+    
+    names(.res) <- .v$ym[1]
     return(.res)
     
   })
   
   # list -> multi-band spatRast
   .chunks <- rast(.chunks)
+  
+  ## TODO: ensure ordering through time is correct!
   
   
   # totals for HI and PR
@@ -245,11 +260,10 @@
   .template <- rast(ext(ext.pr), res = 1000 * g.pr, crs = crs.pr, vals = NA_integer_)
   r.pr <- rasterize(x.pr, .template, background = NA, fun = function(i){length(i)})
   
-  # .template <- rast(ext(ext.conus), res = 1000 * g.conus, crs = crs.conus, vals = NA_integer_)
-  # r.conus <- rasterize(x.conus, .template, background = NA, fun = function(i){length(i)})
-  
   # flatten slices -> total
   r.conus <- app(.chunks, fun = sum, na.rm = TRUE)
+  
+  # TODO make monthly mean grids
   
   
   ## file names
@@ -276,41 +290,10 @@
   ## save for GIS use
   writeRaster(r.conus, filename = f.conus, datatype = "INT2U", overwrite = TRUE)
   writeRaster(.chunks, filename = f.conus.stack, datatype = "INT2U", overwrite = TRUE)
+  
   writeRaster(r.pr, filename = f.pr, datatype = "INT2U", overwrite = TRUE)
   writeRaster(r.hi, filename = f.hi, datatype = "INT2U", overwrite = TRUE)
   
-}
-
-## TODO: wasteful copying / reshaping, can probably be done with grids only
-## replaced by rasterize() in modern terra
-
-pts2grid <- function(p, g) {
-  stop()
-  # down-grade to DF
-  # this will fail with 0-length spatVect
-  x.df <- as.data.frame(p, geom = 'XY')
-  
-  # decimate coordinates grid cell spacing (km) -> (m)
-  x.df$x <- round_any(x.df$x, g * 1000)
-  x.df$y <- round_any(x.df$y, g * 1000)
-  
-  ## cast to wide format and count occurrences
-  # fake column for counting
-  x.df$fake <- 'counts'
-  x.wide <- dcast(x.df, x + y ~ fake, fun.aggregate = length, value.var = 'fake')
-  
-  ## points -> rast
-  # use CRS of points
-  r <- rast(x.wide, type = 'xyz', crs = crs(p))
-  
-  # # crop to CONUS
-  # r <- crop(r, ext(us_states))
-  
-  ## TODO: figure this out: not all NA are 0
-  # NA -> zero density
-  # r[is.na(r[])] <- 0.0001 
-  
-  return(r)
 }
 
 resizeImage <- function(f, geom) {
@@ -318,3 +301,37 @@ resizeImage <- function(f, geom) {
   i <- image_resize(i, geometry = geom, filter = 'LanczosSharp')
   image_write(i, path = f)
 }
+
+
+## replaced by rasterize() in modern terra
+# 
+# pts2grid <- function(p, g) {
+#   stop()
+#   # down-grade to DF
+#   # this will fail with 0-length spatVect
+#   x.df <- as.data.frame(p, geom = 'XY')
+#   
+#   # decimate coordinates grid cell spacing (km) -> (m)
+#   x.df$x <- round_any(x.df$x, g * 1000)
+#   x.df$y <- round_any(x.df$y, g * 1000)
+#   
+#   ## cast to wide format and count occurrences
+#   # fake column for counting
+#   x.df$fake <- 'counts'
+#   x.wide <- dcast(x.df, x + y ~ fake, fun.aggregate = length, value.var = 'fake')
+#   
+#   ## points -> rast
+#   # use CRS of points
+#   r <- rast(x.wide, type = 'xyz', crs = crs(p))
+#   
+#   # # crop to CONUS
+#   # r <- crop(r, ext(us_states))
+#   
+#   ## TODO: figure this out: not all NA are 0
+#   # NA -> zero density
+#   # r[is.na(r[])] <- 0.0001 
+#   
+#   return(r)
+# }
+
+

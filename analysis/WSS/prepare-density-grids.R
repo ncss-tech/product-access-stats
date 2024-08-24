@@ -2,11 +2,10 @@
 ##
 ##
 
-library(plyr) # round_any()
-library(reshape2)
 library(sf)
 library(spData) 
 library(terra)
+library(purrr)
 
 ## local functions
 source('../local-functions.R')
@@ -38,6 +37,7 @@ x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
 # ~ 22 minutes (3x spatial intersection with full dataset)
 # ~ 13 minutes (intersection on indexed-subset for AK, HI, PR)
+# ~ 18 minutes (2024 version)
 system.time(.makeGrids(x, .prefix = 'AOI', .output = .gridOutput))
 
 # done

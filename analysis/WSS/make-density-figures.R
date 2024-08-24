@@ -8,6 +8,8 @@ library(sf)
 library(spData) 
 library(terra)
 library(magick)
+library(purrr)
+library(av)
 
 
 ## local functions
@@ -62,6 +64,47 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 
 
 # TODO AK
+
+
+
+# TODO: monthly CONUS
+
+
+# time slices for CONUS
+r <- rast(file.path(.gridOutput, sprintf("%s-stack-density.tif", .prefix)))
+nm <- names(r)
+
+.td <- file.path(.figureOutput, 'animation')
+dir.create(.td)
+
+# ~3 minutes
+walk(seq_along(nm), .progress = TRUE, .f = function(i) {
+  .of <- file.path(.td, sprintf('%s-density-%03d.png', .prefix, i))
+  
+  .title <- sprintf('WSS AOI Centroid Density\n%s', nm[i])
+  
+  .CONUS_DensityMap(r[[i]], .file = .of, .title = .title, .g = g.conus)
+})
+
+
+# animate
+
+# encode as MP4 ~ 4FPS
+f.render <- list.files(.td, pattern = '.png$', full.names = TRUE)
+av_encode_video(
+  input = f.render, 
+  output = file.path(.figureOutput, 'AOI-animation.mp4'), 
+  framerate = 4,
+  # required if image height is not an even number
+  vfilter = "pad=ceil(iw/2)*2:ceil(ih/2)*2"
+)
+
+unlink(.td, recursive = TRUE)
+
+
+## cleanup
+rm(list = ls())
+gc(reset = TRUE)
 
 
 

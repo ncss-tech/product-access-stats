@@ -2,7 +2,7 @@
 ##
 ##
 
-library(plyr) # round_any()
+
 library(reshape2)
 library(sf)
 library(spData) 

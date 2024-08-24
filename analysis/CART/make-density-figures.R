@@ -91,8 +91,8 @@ library(av)
 f.render <- list.files(.td, pattern = '.png$', full.names = TRUE)
 av_encode_video(
   input = f.render, 
-  output = 'water-depth-variable-infiltration-highres.mp4', 
-  framerate = 8,
+  output = 'test.mp4', 
+  framerate = 4,
   # required if image height is not an even number
   vfilter = "pad=ceil(iw/2)*2:ceil(ih/2)*2"
 )
