@@ -219,7 +219,6 @@
   # note rasterize() trick
   message('  point -> grid conversion')
   
-  
   ## downgrade spatVect -> data.frame
   # currently a bug in split.terra
   x.conus <- as.data.frame(x.conus[, c('date', 'ym')], geom = 'xy')

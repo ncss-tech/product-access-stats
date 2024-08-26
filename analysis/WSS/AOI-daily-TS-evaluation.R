@@ -5,8 +5,12 @@ library(data.table)
 library(ragg)
 
 
-## common configuration
+## configuration
+# global
+source('../../analysis/global-config.R')
+# local
 source('config.R')
+
 
 # load combined/pre-processed data
 x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))

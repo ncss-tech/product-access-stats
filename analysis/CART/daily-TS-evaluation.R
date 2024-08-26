@@ -4,8 +4,12 @@ library(reshape2)
 library(data.table)
 library(ragg)
 
-## common configuration
+## configuration
+# global
+source('../../analysis/global-config.R')
+# local
 source('config.R')
+
 
 # load combined/pre-processed data
 x <- fread('../../CART_4_years_sda.csv', na.strings = 'NULL')

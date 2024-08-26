@@ -13,7 +13,10 @@ library(purrr)
 ## local functions
 source('../local-functions.R')
 
-## common configuration
+## configuration
+# global
+source('../../analysis/global-config.R')
+# local
 source('config.R')
 
 

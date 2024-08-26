@@ -9,16 +9,21 @@
 #  * split by season
 
 
-library(latticeExtra)
 library(sf)
 library(spData) 
 library(terra)
 library(magick)
+library(purrr)
+library(av)
+
 
 ## local functions
 source('../local-functions.R')
 
-## common configuration
+## configuration
+# global
+source('../../analysis/global-config.R')
+# local
 source('config.R')
 
 ## date stamp 
@@ -90,10 +95,66 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 
 
 
+## TODO: animation of monthly time slices likely most interesting
+
+
+## monthly time slices for CONUS
+r <- rast(file.path(.gridOutput, sprintf("%s-stack-density.tif", .prefix)))
+nm <- names(r)
+
+# # remove the first august data, to avoid over-emphasis
+# # copy as we need the full datset later
+# r.sub <- r[[-1]]
+# 
+# 
+# ## generate monthly totals
+# .s <- strsplit(names(r.sub), '-', fixed = TRUE)
+# .s <- sapply(.s, '[[', 2)
+# 
+# # final check
+# table(.s)
+# 
+# .f <- factor(.s, labels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+# r.monthly <- tapp(r.sub, index = .f,  fun = sum, na.rm = TRUE)
+# 
+# plot(log(r.monthly))
+
+
+## TODO: think about best method of depicting monthly totals ...
+
+
+
+## render maps for all time slices
+.td <- file.path(.figureOutput, 'animation')
+dir.create(.td)
+
+# ~1 minute
+walk(seq_along(nm), .progress = TRUE, .f = function(i) {
+  .of <- file.path(.td, sprintf('%s-density-%03d.png', .prefix, i))
+  
+  .title <- sprintf('SoilWeb Gmaps Query Density\n%s', nm[i])
+  
+  .CONUS_DensityMap(r[[i]], .file = .of, .title = .title, .g = g.conus)
+})
+
+
+## animate
+
+# encode as MP4 ~ 4FPS
+f.render <- list.files(.td, pattern = '.png$', full.names = TRUE)
+av_encode_video(
+  input = f.render, 
+  output =  file.path(.figureOutput, 'AOI-animation.mp4'), 
+  framerate = 4,
+  # required if image height is not an even number
+  vfilter = "pad=ceil(iw/2)*2:ceil(ih/2)*2"
+)
+
+unlink(.td, recursive = TRUE)
+
 
 ## cleanup
 rm(list = ls())
 gc(reset = TRUE)
-
 
 

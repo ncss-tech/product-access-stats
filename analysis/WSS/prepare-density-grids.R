@@ -10,9 +10,11 @@ library(purrr)
 ## local functions
 source('../local-functions.R')
 
-## common configuration
+## configuration
+# global
+source('../../analysis/global-config.R')
+# local
 source('config.R')
-
 
 ## NOTE: must re-load all spatial data if re-gridding in the same R session
 

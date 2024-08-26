@@ -3,7 +3,10 @@ library(reshape2)
 library(tactile)
 library(ragg)
 
-## common configuration
+## configuration
+# global
+source('../../analysis/global-config.R')
+# local
 source('config.R')
 
 # source data, pre-processed

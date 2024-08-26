@@ -13,8 +13,12 @@ library(av)
 ## local functions
 source('../local-functions.R')
 
-## common configuration
+## configuration
+# global
+source('../../analysis/global-config.R')
+# local
 source('config.R')
+
 
 ## date stamp 
 u.date <- as.character(Sys.Date())
@@ -73,10 +77,33 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 # TODO AK
 
 
-# time slices for CONUS
+## monthly time slices for CONUS
 r <- rast(file.path(.gridOutput, sprintf("%s-stack-density.tif", .prefix)))
 nm <- names(r)
 
+# # remove the first august data, to avoid over-emphasis
+# # copy as we need the full datset later
+# r.sub <- r[[-1]]
+# 
+# 
+# ## generate monthly totals
+# .s <- strsplit(names(r.sub), '-', fixed = TRUE)
+# .s <- sapply(.s, '[[', 2)
+# 
+# # final check
+# table(.s)
+# 
+# .f <- factor(.s, labels = c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+# r.monthly <- tapp(r.sub, index = .f,  fun = sum, na.rm = TRUE)
+# 
+# plot(log(r.monthly))
+
+
+## TODO: think about best method of depicting monthly totals ...
+
+
+
+## render maps for all time slices
 .td <- file.path(.figureOutput, 'animation')
 dir.create(.td)
 
