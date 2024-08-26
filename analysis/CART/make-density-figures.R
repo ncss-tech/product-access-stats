@@ -41,9 +41,15 @@ hi <- project(hi, crs.hi)
 # TODO AK
 
 
+## date range
+x <- readRDS('AOI-points.rds')
+.dateRange <- range(x$date)
+rm(x)
+
+
 ## CART centroids
 .prefix <- 'AOI'
-.title <- 'CART AOI Centroid Density'
+.title <- sprintf('CART AOI Centroid Density\n%s', paste(.dateRange, collapse = ' \U2192 '))
 
 
 # totals
@@ -84,14 +90,13 @@ walk(seq_along(nm), .progress = TRUE, .f = function(i) {
 })
 
 
-# animate
-library(av)
+## animate
 
-# encode as MP4 ~ 8FPS
+# encode as MP4 ~ 4FPS
 f.render <- list.files(.td, pattern = '.png$', full.names = TRUE)
 av_encode_video(
   input = f.render, 
-  output = 'test.mp4', 
+  output =  file.path(.figureOutput, 'AOI-animation.mp4'), 
   framerate = 4,
   # required if image height is not an even number
   vfilter = "pad=ceil(iw/2)*2:ceil(ih/2)*2"

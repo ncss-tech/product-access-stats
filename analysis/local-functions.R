@@ -6,7 +6,7 @@
   # histogram for legend
   h <- hist(log(r,  base = 10), plot = FALSE, breaks = 20)
   
-  png(filename = .file, width = 2200, height = 1200, res = 200)
+  png(filename = .file, width = 2400, height = 1200, res = 200)
   
   plot(
     r,
@@ -132,7 +132,7 @@
   
   lines(us_states, lwd = 2)
   
-  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1, line = 2.5, adj = 0.7)
+  mtext(sprintf('counts / %sx%s km grid cell\nUpdated: %s', as.character(.g), as.character(.g), u.date), side = 1, line = 2.2, adj = 0.7)
   
   par(fig = c(0.01, 0.55, 0.06, 0.29), new = TRUE, mar = c(0, 0, 0, 0), xpd = NA) 
   

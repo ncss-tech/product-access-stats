@@ -9,6 +9,8 @@ Updated semi-annually.
 ![](results/WSS/AOI-density-HI.png)
 ![](results/WSS/AOI-density-PR.png)
 
+[CONUS animation of density by month](results/WSS/AOI-animation.mp4)
+
 #### Monthly Average
 ![](results/WSS/WSS-AOI-density-monthly-mean.png)
 
@@ -46,6 +48,9 @@ Updated semi-annually.
 ![](results/CART/AOI-density.png)
 ![](results/CART/AOI-density-HI.png)
 ![](results/CART/AOI-density-PR.png)
+
+[CONUS animation of density by month](results/CART/AOI-animation.mp4)
+
 
 ### AOI Created per Day
 ![](results/CART/CART_daily-ts-decomposition.png)
