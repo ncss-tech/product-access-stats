@@ -2,11 +2,9 @@
 ##
 ##
 
-library(reshape2)
 library(sf)
 library(spData) 
 library(terra)
-library(av)
 library(purrr)
 
 

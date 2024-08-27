@@ -2,8 +2,6 @@
 ##
 ##
 
-
-library(reshape2)
 library(sf)
 library(spData) 
 library(terra)
@@ -38,7 +36,8 @@ us_states <- project(us_states, 'EPSG:4326')
 
 
 ## make grids
-# WSS AOI
+
+# prepared log points
 x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
 # ~ 33 seconds

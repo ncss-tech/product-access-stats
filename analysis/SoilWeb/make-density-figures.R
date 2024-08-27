@@ -49,8 +49,7 @@ us_states <- project(us_states, crs.conus)
 # local CRS for AK, HI, PR
 pr <- project(pr, crs.pr)
 hi <- project(hi, crs.hi)
-
-# TODO AK
+ak <- project(ak, crs.ak)
 
 
 ## GMAPS
@@ -72,6 +71,12 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 .of <- file.path(.figureOutput, sprintf('%s-density-PR.png', .prefix))
 .PR_DensityMap(r, .file = .of, .title = .title, .g = g.pr)
 
+# AK
+r <- rast(file.path(.gridOutput, sprintf("%s-density-AK.tif", .prefix)))
+.of <- file.path(.figureOutput, sprintf('%s-density-AK.png', .prefix))
+.AK_DensityMap(r, .file = .of, .title = .title, .g = g.ak)
+
+
 
 
 ## App 2.x
@@ -92,6 +97,11 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-HI.tif", .prefix)))
 r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 .of <- file.path(.figureOutput, sprintf('%s-density-PR.png', .prefix))
 .PR_DensityMap(r, .file = .of, .title = .title, .g = g.pr)
+
+# AK
+r <- rast(file.path(.gridOutput, sprintf("%s-density-AK.tif", .prefix)))
+.of <- file.path(.figureOutput, sprintf('%s-density-AK.png', .prefix))
+.AK_DensityMap(r, .file = .of, .title = .title, .g = g.ak)
 
 
 
@@ -122,35 +132,35 @@ nm <- names(r)
 
 ## TODO: think about best method of depicting monthly totals ...
 
-
-
-## render maps for all time slices
-.td <- file.path(.figureOutput, 'animation')
-dir.create(.td)
-
-# ~1 minute
-walk(seq_along(nm), .progress = TRUE, .f = function(i) {
-  .of <- file.path(.td, sprintf('%s-density-%03d.png', .prefix, i))
-  
-  .title <- sprintf('SoilWeb Gmaps Query Density\n%s', nm[i])
-  
-  .CONUS_DensityMap(r[[i]], .file = .of, .title = .title, .g = g.conus)
-})
-
-
-## animate
-
-# encode as MP4 ~ 4FPS
-f.render <- list.files(.td, pattern = '.png$', full.names = TRUE)
-av_encode_video(
-  input = f.render, 
-  output =  file.path(.figureOutput, 'AOI-animation.mp4'), 
-  framerate = 4,
-  # required if image height is not an even number
-  vfilter = "pad=ceil(iw/2)*2:ceil(ih/2)*2"
-)
-
-unlink(.td, recursive = TRUE)
+# 
+# 
+# ## render maps for all time slices
+# .td <- file.path(.figureOutput, 'animation')
+# dir.create(.td)
+# 
+# # ~1 minute
+# walk(seq_along(nm), .progress = TRUE, .f = function(i) {
+#   .of <- file.path(.td, sprintf('%s-density-%03d.png', .prefix, i))
+#   
+#   .title <- sprintf('SoilWeb Gmaps Query Density\n%s', nm[i])
+#   
+#   .CONUS_DensityMap(r[[i]], .file = .of, .title = .title, .g = g.conus)
+# })
+# 
+# 
+# ## animate
+# 
+# # encode as MP4 ~ 4FPS
+# f.render <- list.files(.td, pattern = '.png$', full.names = TRUE)
+# av_encode_video(
+#   input = f.render, 
+#   output =  file.path(.figureOutput, 'AOI-animation.mp4'), 
+#   framerate = 4,
+#   # required if image height is not an even number
+#   vfilter = "pad=ceil(iw/2)*2:ceil(ih/2)*2"
+# )
+# 
+# unlink(.td, recursive = TRUE)
 
 
 ## cleanup

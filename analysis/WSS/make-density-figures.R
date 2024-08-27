@@ -2,8 +2,6 @@
 ##
 ##
 
-
-
 library(sf)
 library(spData) 
 library(terra)
@@ -44,7 +42,7 @@ us_states <- project(us_states, crs.conus)
 # local CRS for AK, HI, PR
 pr <- project(pr, crs.pr)
 hi <- project(hi, crs.hi)
-# TODO AK
+ak <- project(ak, crs.ak)
 
 
 ## WSS AOI
@@ -66,9 +64,10 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-PR.tif", .prefix)))
 .of <- file.path(.figureOutput, sprintf('%s-density-PR.png', .prefix))
 .PR_DensityMap(r, .file = .of, .title = .title, .g = g.pr)
 
-
-# TODO AK
-
+# AK
+r <- rast(file.path(.gridOutput, sprintf("%s-density-AK.tif", .prefix)))
+.of <- file.path(.figureOutput, sprintf('%s-density-AK.png', .prefix))
+.AK_DensityMap(r, .file = .of, .title = .title, .g = g.ak)
 
 
 # TODO: monthly CONUS

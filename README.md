@@ -7,6 +7,7 @@ Updated semi-annually.
 ### AOI Centroid Density Maps
 ![](results/WSS/AOI-density.png)
 ![](results/WSS/AOI-density-HI.png)
+![](results/WSS/AOI-density-AK.png)
 ![](results/WSS/AOI-density-PR.png)
 
 [CONUS animation of density by month](results/WSS/AOI-animation.mp4)
@@ -47,6 +48,7 @@ Updated semi-annually.
 ### AOI Centroid Density Maps
 ![](results/CART/AOI-density.png)
 ![](results/CART/AOI-density-HI.png)
+![](results/CART/AOI-density-AK.png)
 ![](results/CART/AOI-density-PR.png)
 
 [CONUS animation of density by month](results/CART/AOI-animation.mp4)
@@ -72,6 +74,7 @@ Updated semi-annually.
 ### Desktop Application (SoilWeb "Gmaps")
 ![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density.png)
 ![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density-HI.png)
+![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density-AK.png)
 ![SoilWeb Gmaps Application: Query Density](results/SoilWeb/gmap-density-PR.png)
 ![SoilWeb Gmaps Application: Requests per Day](results/SoilWeb/gmap_daily-ts-decomposition.png)
 ![SoilWeb Gmaps Application: Requests per Day / Year](results/SoilWeb/gmap_yearly-bwplot.png)
@@ -82,6 +85,7 @@ Updated semi-annually.
 ### iOS and Android Smartphone Applications
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density.png)
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density-HI.png)
+![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density-AK.png)
 ![SoilWeb Smartphone App: Query Density](results/SoilWeb/app-2x-density-PR.png)
 ![SoilWeb Smartphone App: Requests per Day](results/SoilWeb/app-2x_daily-ts-decomposition.png)
 

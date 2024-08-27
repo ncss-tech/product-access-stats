@@ -9,7 +9,7 @@ source('prepare-data.R')
 ## TODO: use better labeling for log scales
 
 ## create point density grids
-# CONUS, PR, Hi
+# CONUS, PR, Hi, AK
 # ~ 6 minutes
 source('prepare-density-grids.R')
 

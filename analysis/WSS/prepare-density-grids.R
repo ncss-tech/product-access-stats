@@ -38,8 +38,8 @@ us_states <- project(us_states, 'EPSG:4326')
 x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
 # ~ 22 minutes (3x spatial intersection with full dataset)
-# ~ 13 minutes (intersection on indexed-subset for AK, HI, PR)
-# ~ 18 minutes (2024 version)
+# ~ 13 minutes (intersection on indexed-subset for HI, PR)
+# ~ 20 minutes (2024 version, added AK)
 system.time(.makeGrids(x, .prefix = 'AOI', .output = .gridOutput))
 
 # done
