@@ -35,11 +35,20 @@ us_states <- vect(us_states)
 us_states <- project(us_states, 'EPSG:4326')
 
 
-## make grids
-
-# prepared log points
+## load prepared log points
 x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
+
+## save metadata
+.metadata <- list(
+  dateRange = range(x$date),
+  nobs = nrow(x)
+)
+
+saveRDS(.metadata, 'metadata.rds')
+
+
+## make grids
 # ~ 33 seconds
 system.time(.makeGrids(x, .prefix = 'AOI', .output = .gridOutput))
 

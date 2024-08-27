@@ -29,7 +29,6 @@ source('config.R')
 ## date stamp 
 u.date <- as.character(Sys.Date())
 
-
 ## PR outline, GCS
 pr <- vect(file.path(.outlines, 'MLRA52-PR.shp'))
 
@@ -53,8 +52,14 @@ ak <- project(ak, crs.ak)
 
 
 ## GMAPS
+
+# load metadata
+.metadata <- readRDS('metadata-gmap.rds')
+.dateRange <- paste(.metadata$dateRange, collapse = ' \U2192 ')
+
+# 
 .prefix <- 'gmap'
-.title <- 'SoilWeb Gmaps Query Density'
+.title <- sprintf('SoilWeb Gmaps Query Density\n%s', .dateRange)
 
 # CONUS
 r <- rast(file.path(.gridOutput, sprintf("%s-density.tif", .prefix)))
@@ -80,8 +85,14 @@ r <- rast(file.path(.gridOutput, sprintf("%s-density-AK.tif", .prefix)))
 
 
 ## App 2.x
+
+# load metadata
+.metadata <- readRDS('metadata-2x.rds')
+.dateRange <- paste(.metadata$dateRange, collapse = ' \U2192 ')
+
+#
 .prefix <- 'app-2x'
-.title <- 'SoilWeb App 2.x Query Density'
+.title <- sprintf('SoilWeb App 2.x Query Density\n%s', .dateRange)
 
 # CONUS
 r <- rast(file.path(.gridOutput, sprintf("%s-density.tif", .prefix)))

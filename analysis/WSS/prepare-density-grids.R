@@ -37,6 +37,16 @@ us_states <- project(us_states, 'EPSG:4326')
 # WSS AOI
 x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
+## save metadata
+.metadata <- list(
+  dateRange = range(x$date),
+  nobs = nrow(x)
+)
+
+saveRDS(.metadata, 'metadata.rds')
+
+
+
 # ~ 22 minutes (3x spatial intersection with full dataset)
 # ~ 13 minutes (intersection on indexed-subset for HI, PR)
 # ~ 20 minutes (2024 version, added AK)

@@ -45,16 +45,14 @@ hi <- project(hi, crs.hi)
 ak <- project(ak, crs.ak)
 
 
-#### ---> get this from local metadata <----------
-## date range
-x <- readRDS('AOI-points.rds')
-.dateRange <- range(x$date)
-rm(x)
+## load metadata
+.metadata <- readRDS('metadata.rds')
+.dateRange <- paste(.metadata$dateRange, collapse = ' \U2192 ')
 
 
 ## CART centroids
 .prefix <- 'AOI'
-.title <- sprintf('CART AOI Centroid Density\n%s', paste(.dateRange, collapse = ' \U2192 '))
+.title <- sprintf('CART AOI Centroid Density\n%s', .dateRange)
 
 
 # totals

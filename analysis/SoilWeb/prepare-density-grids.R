@@ -41,12 +41,29 @@ x$LogID <- 1:nrow(x)
 x$ym <- format(x$date, '%Y-%m')
 .makeGrids(x, .prefix = 'app-2x', .output = .gridOutput)
 
+# save metadata
+.metadata <- list(
+  dateRange = range(x$date),
+  nobs = nrow(x)
+)
+
+saveRDS(.metadata, 'metadata-2x.rds')
+
+
 # gmaps application
 # ~ 10 minutes
 x <- readRDS(file.path(.input, 'gmap.Rds'))
 x$LogID <- 1:nrow(x)
 x$ym <- format(x$date, '%Y-%m')
 .makeGrids(x, .prefix = 'gmap', .output = .gridOutput)
+
+# save metadata
+.metadata <- list(
+  dateRange = range(x$date),
+  nobs = nrow(x)
+)
+
+saveRDS(.metadata, 'metadata-gmap.rds')
 
 
 ## check

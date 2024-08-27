@@ -44,10 +44,15 @@ pr <- project(pr, crs.pr)
 hi <- project(hi, crs.hi)
 ak <- project(ak, crs.ak)
 
+## load metadata
+.metadata <- readRDS('metadata.rds')
+.dateRange <- paste(.metadata$dateRange, collapse = ' \U2192 ')
+
 
 ## WSS AOI
 .prefix <- 'AOI'
-.title <- 'WSS AOI Centroid Density'
+.title <- sprintf('WSS AOI Centroid Density\n%s', .dateRange)
+
 
 # CONUS
 r <- rast(file.path(.gridOutput, sprintf("%s-density.tif", .prefix)))

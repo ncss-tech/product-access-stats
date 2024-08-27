@@ -107,7 +107,7 @@
   h <- hist(log(r,  base = 10), plot = FALSE, breaks = 20)
   
   ## grid + overlay of AK
-  png(filename = .file, width = 2200, height = 1900, res = 200)
+  png(filename = .file, width = 2200, height = 1700, res = 200)
   
   plot(
     log(r, base = 10),
