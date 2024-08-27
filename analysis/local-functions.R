@@ -162,7 +162,8 @@
   # histogram for legend
   h <- hist(log(r,  base = 10), plot = FALSE)
   
-  ## TODO: add date range
+  # TODO: consider adjusting y-scale to prevent low-frequency values from being squished
+  # h$counts <- log(h$counts, base = 10)
   
   png(filename = .file, width = 2200, height = 1600, res = 200)
   
