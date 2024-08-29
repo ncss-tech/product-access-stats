@@ -7,8 +7,11 @@
 # fast file reading, sorting, and unique() methods
 library(data.table)
 
+# local config
+source('config.R')
+
 # bogus geometry may result in NULL values for x,y
-x <- fread('../../CART_4_years_sda.csv', na.strings = 'NULL')
+x <- fread(file.path(.sourcePath, 'CART_4_years_sda.csv'), na.strings = 'NULL')
 
 # there are likely duplicates due to overlap in input files
 x <- unique(x)

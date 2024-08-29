@@ -1,8 +1,10 @@
 ## this is a local configuration file
 
+## source data
+.sourcePath <- 'e:/product-acccess-logs/WSS'
 
 ## paths
-.input <- 'E:/backup/Archive_Dylan_Beaudette/NSSC/WSS-access-stats/data'
+.input <- 'e:/product-acccess-logs/WSS'
 .gridOutput <- '../../GIS/WSS'
 .outlines <- '../../GIS/outlines'
 .figureOutput <- '../../results/WSS'

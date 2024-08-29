@@ -1,7 +1,10 @@
 library(readr)
 
+# local config
+source('config.R')
+
 ## work in local data directory
-setwd(file.path(wd, 'data'))
+setwd(file.path(.sourcePath, 'data'))
 
 
 #### first version from Jason, has column names

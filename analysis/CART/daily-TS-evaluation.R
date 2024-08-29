@@ -12,7 +12,7 @@ source('config.R')
 
 
 # load combined/pre-processed data
-x <- fread('../../CART_4_years_sda.csv', na.strings = 'NULL')
+x <- fread(file.path(.sourcePath, 'CART_4_years_sda.csv'), na.strings = 'NULL')
 
 # 2024: 1256702
 nrow(x)

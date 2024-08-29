@@ -1,9 +1,8 @@
 library(readr)
 library(reshape2)
 
-
 ## paths
-.input <- 'E:/working-from-home-to-file/SoilWeb/access-tracking/data'
+.input <- 'E:/work-file-system/SoilWeb/access-tracking/data'
 .output <- 'processed-data'
 
 ## cleanup from last time

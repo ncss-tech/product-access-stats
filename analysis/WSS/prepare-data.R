@@ -7,8 +7,11 @@
 # fast file reading, sorting, and unique() methods
 library(data.table)
 
+# local config
+source('config.R')
+
 # subsets of original data
-fp <- file.path(wd, 'data')
+fp <- file.path(.sourcePath, 'data')
 f <- list.files(path = fp, pattern='\\.csv.gz', full.names = TRUE)
 
 # read / combine

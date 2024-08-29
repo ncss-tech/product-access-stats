@@ -14,14 +14,6 @@
 
 
 
-## data are stored locally for now
-wd <- 'S:/NRCS/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
-
-# local copy
-wd <- 'E:/backup/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
-
-
-
 ## re-build .csv.gz versions of the source data
 ## this has do be done manually, each file is slightly different
 # source('process-raw-data-manually.R')
@@ -30,6 +22,8 @@ wd <- 'E:/backup/Archive_Dylan_Beaudette/NSSC/WSS-access-stats'
 ## prepare combined data
 ## automated
 source('prepare-data.R')
+
+
 
 ## AOI daily time-series analysis
 source('AOI-daily-TS-evaluation.R')

@@ -3,13 +3,12 @@ library(tactile)
 library(reshape2)
 library(data.table)
 library(ragg)
-library(readr)
 
 ## common configuration
 source('config.R')
 
 # load combined/pre-processed data
-x <- read_csv('E:/temp/SDA_baflogs_Metrics_Spatial_22_23_v3.csv')
+x <- fread(file.path(.sourcePath, 'SDA_baflogs_Metrics_Spatial_22_23_v3.csv.gz'))
 
 # 2024: 10104148
 nrow(x)
