@@ -13,7 +13,6 @@ source('prepare-data.R')
 # ~ 6 minutes
 source('prepare-density-grids.R')
 
-
 ## make density maps
 # CONUS, PR, Hi
 # ~ 2 minutes
