@@ -13,7 +13,7 @@ source('config.R')
 
 
 # load combined/pre-processed data
-x <- readRDS(file.path(wd, 'data', 'AOI-points.rds'))
+x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
 # 2024: 28800000
 nrow(x)

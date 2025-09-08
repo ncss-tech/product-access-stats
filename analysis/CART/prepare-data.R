@@ -11,7 +11,7 @@ library(data.table)
 source('config.R')
 
 # bogus geometry may result in NULL values for x,y
-x <- fread(file.path(.sourcePath, 'CART_4_years_sda.csv'), na.strings = 'NULL')
+x <- fread(file.path(.sourcePath, 'CART Soil Assessments.csv.gz'), na.strings = 'NULL')
 
 # there are likely duplicates due to overlap in input files
 x <- unique(x)
@@ -19,7 +19,8 @@ x <- unique(x)
 # proceed as data.frame
 x <- as.data.frame(x)
 
-# latest: 4,602,217 rows
+# CART_4_years_sda.csv.gz:       4,602,217 rows  ["2020-08-22" "2024-08-22"]
+# CART Soil Assessments.csv.gz:  4,930,503 rows  ["2021-09-05" "2025-09-05"]
 nrow(x)
 
 # # check for invalid WKT ... but why?

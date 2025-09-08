@@ -12,9 +12,10 @@ source('config.R')
 
 
 # load combined/pre-processed data
-x <- fread(file.path(.sourcePath, 'CART_4_years_sda.csv'), na.strings = 'NULL')
+x <- fread(file.path(.sourcePath, 'CART Soil Assessments.csv.gz'), na.strings = 'NULL')
 
 # 2024: 1256702
+# 2025: 4930503
 nrow(x)
 
 head(x)
@@ -32,6 +33,7 @@ x <- x[order(x$date), ]
 x.daily <- x[, .(freq = .N), by = .(date)]
 x.daily <- as.data.frame(x.daily)
 
+#FY25: 1429 ["2021-09-05" "2025-09-05"]
 nrow(x.daily)
 range(x.daily$date)
 
