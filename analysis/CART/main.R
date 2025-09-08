@@ -7,14 +7,13 @@
 ##  * consolidate intermediate files
 ##  * prepare density maps by year-month / region
 ##  * add SoilWeb weekday / seasonal summaries
+##  * notes file on interpretation of spatial / temporal patterns
 
 ## Notes:
 ##  * it is simple to adapt the gridding / map creation code to run on temporal subsets
 ##    |---> save year-month slices to ~108-band image for animations, pixel-slices, etc.
 
 
-
-## TODO: figure out long-term solution, currently random CSVs
 
 ## prepare combined data
 ## automated
