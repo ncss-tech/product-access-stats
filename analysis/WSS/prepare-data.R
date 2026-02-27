@@ -11,7 +11,7 @@ library(data.table)
 source('config.R')
 
 # subsets of original data
-fp <- file.path(.sourcePath, 'data')
+fp <- .sourcePath
 f <- list.files(path = fp, pattern='\\.csv.gz', full.names = TRUE)
 
 # read / combine
@@ -35,12 +35,15 @@ x <- x[order(x$date), ]
 
 # 2023: 25,069,424 rows
 # 2024: 28,800,000 rows
+# 2026: 30,271,477 rows (gaps present)
 nrow(x)
 
 # save for later
 saveRDS(x, file = file.path(fp, 'AOI-points.rds'))
 
 # cleanup
+rm(x) ; gc(reset = TRUE)
+
 
 
 

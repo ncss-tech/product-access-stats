@@ -12,10 +12,14 @@ source('config.R')
 
 
 # load combined/pre-processed data
-x <- fread(file.path(.sourcePath, 'CART Soil Assessments.csv.gz'), na.strings = 'NULL')
+x <- readRDS(file.path(.sourcePath, 'AOI-points.rds'))
+
+# use data.table methods for aggregation etc.
+x <- data.table(x)
 
 # 2024: 1256702
 # 2025: 4930503
+# 2026: 5026376
 nrow(x)
 
 head(x)
@@ -23,17 +27,12 @@ head(x)
 
 ## hits / day
 
-# normalize name
-x$date <- as.Date(x$log_date, format  = "%Y-%m-%d")
-
-# re-order
-x <- x[order(x$date), ]
-
 # aggregate to day
 x.daily <- x[, .(freq = .N), by = .(date)]
 x.daily <- as.data.frame(x.daily)
 
-#FY25: 1429 ["2021-09-05" "2025-09-05"]
+# FY25: 1429 ["2021-09-05" "2025-09-05"]
+# FY26: 1524 ["2021-09-05" "2026-01-31"]
 nrow(x.daily)
 range(x.daily$date)
 
@@ -50,7 +49,7 @@ x.daily$mo <- factor(
 
 ## TODO: automate this
 # smooth over ... 7-day window
-x.ts <- ts(x.daily$freq, frequency = 60, start = c(2023, 08, 21))
+x.ts <- ts(x.daily$freq, frequency = 60, start = c(2021, 09, 05))
 
 # STL decomposition
 x.stl <- stl(x.ts, s.window = 'periodic')
@@ -160,6 +159,8 @@ print(p)
 dev.off()
 
 
+
+## TODO: may need to interpolate through missing values in daily sequence
 
 ##
 mm <- reshape2::dcast(m, year + doy ~ variable, fun.aggregate = mean, na.rm = TRUE)

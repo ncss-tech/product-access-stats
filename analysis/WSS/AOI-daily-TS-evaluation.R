@@ -16,6 +16,7 @@ source('config.R')
 x <- readRDS(file.path(.input, 'AOI-points.rds'))
 
 # 2024: 28800000
+# 2026: 30271477
 nrow(x)
 
 ## hits / day
