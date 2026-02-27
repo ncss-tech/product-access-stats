@@ -17,6 +17,7 @@ x <- readRDS(file.path(.sourcePath, 'AOI-points.rds'))
 # use data.table methods for aggregation etc.
 x <- data.table(x)
 
+# processing accumulated data:
 # 2024: 1256702
 # 2025: 4930503
 # 2026: 5026376

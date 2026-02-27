@@ -36,7 +36,7 @@ us_states <- project(us_states, 'EPSG:4326')
 
 
 ## load prepared log points
-x <- readRDS(file.path(.input, 'AOI-points.rds'))
+x <- readRDS(file.path(.sourcePath, 'AOI-points.rds'))
 
 
 ## save metadata
